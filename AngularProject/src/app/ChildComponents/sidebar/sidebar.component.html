@@ -1,0 +1,19 @@
+<div class="sidebars">
+  <div class="side-bar-contents">
+    <div *ngFor="let elements of sidebarContents">
+      <div class="sidebar-component test-div">
+        <button>
+          <i [class]="elements.icon"></i>
+          <span class="menu-names-no">{{elements.element}}</span>
+        </button>
+      </div>
+    </div>
+  </div>
+  <div class="busy-mode">
+    <p>Busy Mode</p>
+  <label class="switch">
+    <input type="checkbox" checked>
+    <span class="slider"></span>
+  </label>
+  </div>
+</div>

@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+<body>
+  
+  <main>
+    <div class="container">
+      <h1>Weather App</h1>
+      
+      <div class="input-area">
+        <input
+        type="text"
+        id="input-field"
+        [(ngModel)]="city"
+        placeholder="Enter city name"
+      />
+      
+      <button id="search-city" (click)="searchCity()">Search</button>
+      </div>
+    
+      <p id="error-display" *ngIf="errorMessage">{{ errorMessage }}</p>
+    
+      <div *ngIf="isLoading">Loading...</div>
+    
+      <div class="loader"></div>
+      <div class="container-info-part" *ngIf="weatherData">
+        <p class="info-part">
+          <span>City Name:</span>
+          <span id="city-name">{{ weatherData.name }}</span>
+        </p>
+        <p class="info-part">
+          <span>Temperature:</span>
+        <span id="temperature">{{ weatherData.main.temp }}°C</span>
+        </p>
+        <p class="info-part">
+          <span>Humidity:</span>
+        <span id="humidity">{{ weatherData.main.humidity }}%</span>
+        </p>
+       <div class="img-container">
+        <img
+        id="icon"
+        [src]="'https://openweathermap.org/img/wn/' + weatherData.weather[0].icon + '@2x.png'"
+        alt="Weather Icon"
+        class="weather-icon"
+      />
+       </div>
+      </div>
+    </div>
+  </main>
+  
+</body>
+</html>

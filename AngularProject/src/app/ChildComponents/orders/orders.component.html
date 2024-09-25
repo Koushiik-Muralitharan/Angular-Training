@@ -1,0 +1,58 @@
+<div>
+  <div class="orders">
+    <span>Orders</span>
+    <span class="recent"
+      >Recent Orders <i class="fa-solid fa-caret-down"></i>
+    </span>
+  </div>
+  <div class="customers-orders">
+    <div class="div-first">
+      <span class="id">id <i class="fa-solid fa-caret-down"></i></span>
+      <span class="name">Name</span>
+      <span class="payment">Payment</span>
+      <span class="time">
+        <span class="span-main-time">Time remaining <i class="fa-solid fa-caret-down"></i></span>
+        <span class="span-time">Time <i class="fa-solid fa-caret-down"></i></span>
+      </span>
+      <span class="type">Type</span>
+      <span class="status">status</span>
+      <span class="total">Total</span>
+      <span class="action-heading">Action</span>
+    </div>
+    <div *ngFor="let user of orderInfo; let i = index">
+      <div class="customer-details">
+        <span class="id">{{user.id}}</span>
+        <span class="name customer-name">
+          <span class="account-img-time">
+            <div class="customer-img">
+              <img
+                [src]="user.images"
+                alt="user image"/>
+            </div></span>
+          {{user.username}}</span>
+        <span class="payment">{{user.payment}}</span>
+        <span class="time"><i class="fa-regular fa-clock account-img-time"></i> {{user.time}}</span>
+        <span class="type">
+          <span [ngClass]="{
+            'type-delivery': user.type === 'Delivery',
+          }">{{user.type}}</span>
+        </span>
+        <span class="status">
+        <span [ngClass]="{
+          'status-box-on-the-way' : user.status === 'On the way',
+          'status-ready': user.status === 'Ready'
+        }">{{user.status}}</span></span>
+        <span class="total">{{user.total}}</span>
+        <span class="action">
+          <div class="action-center">
+            <i [class]="user.action"></i>
+            <div class="display-options">
+              <span (click)="informParent(i)">Cancel</span>
+              <span>Cancel Product</span>
+              <span>Message</span>
+            </div>
+          </div></span>
+      </div>
+    </div>
+  </div>
+</div>

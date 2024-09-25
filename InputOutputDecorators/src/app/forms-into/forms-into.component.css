@@ -1,0 +1,27 @@
+*{
+    margin: 0px;
+    padding: 0px;
+    box-sizing: border-box;
+}
+
+form{
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.add{
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.borders{
+    border: 1px solid black;
+    width: 300px;
+    padding: 20px;
+}
+
+.button-center{
+    text-align: center;
+}

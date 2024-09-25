@@ -1,0 +1,38 @@
+
+<div class="borders">
+    <form #detailsForm="ngForm" (submit)="onSubmit(detailsForm)">
+        <label for="name">
+            Name: 
+            <input type="text" id="name" name="firstname" placeholder="Enter your name" [(ngModel)]="contact.firstName">
+        </label>
+        <label for="age">
+            Age: 
+            <input type="text" id="age" name="ages" placeholder="Enter your age" [(ngModel)]="contact.age">
+        </label>
+        <label for="phone">
+            Phone: 
+            <input type="text" id="phone" name="phones" placeholder="Enter your ph no" [(ngModel)]="contact.phone">
+        </label>
+        <label for="country-select">
+            Country:
+            <select name="country" id="country-select"  [(ngModel)]="contact.country">
+                <option value="">Select</option>
+                <option [ngValue]="countries.id" *ngFor="let countries of countryList">{{countries.country}}</option>
+            </select>
+        </label>
+    
+        <div class="add" ngModelGroup="address">
+            <label for="city">
+                City:
+                <input type="text" id="city" name="cities" placeholder=" Enter the city" [(ngModel)]="contact.address.city">
+            </label>
+            <label for="street">
+                Street:
+                <input type="text" id="street" name="streets" placeholder=" Enter the street"  [(ngModel)]="contact.address.street">
+            </label>
+    
+        </div>
+    
+        <div class="button-center"><button type="submit">submit</button></div>
+    </form>
+</div>

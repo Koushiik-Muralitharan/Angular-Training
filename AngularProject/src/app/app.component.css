@@ -1,0 +1,106 @@
+main {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr) 4fr;
+  grid-template-rows: auto auto;
+  gap: 1px;
+}
+img{
+  width: 140px;
+  height: 50px;
+  margin: 10px 10px;
+}
+.bringova-logo{
+   grid-template-rows: auto;
+}
+
+.navbar {
+  grid-column-start: 2;
+  grid-column-end: 6;
+}
+
+.main-content {
+  grid-column-start: 2;
+  grid-column-end: 6;
+  border-radius: 20px;
+  background-color: #fcf0f0;
+  margin: 0px 3%;
+}
+.sub-main-content {
+  display: grid;
+  grid-template-columns: 1fr 4fr;
+  grid-template-rows: auto auto;
+  gap: 1px;
+}
+.sub1-main-content {
+  grid-column-start: 1;
+  grid-column-end: 3;
+  padding: 2% 2%;
+}
+.sub2-main-content {
+  grid-column-start: 1;
+  grid-column-end: 3;
+  padding: 1% 2%;
+}
+
+
+/* Styles for Small Screens */
+@media screen and (max-width: 770px) {
+  main {
+    grid-template-columns: 1fr;
+    grid-template-rows: auto auto auto;
+  }
+
+  .navbar {
+    grid-column: 1;
+  }
+
+  .main-content {
+    grid-column: 1;
+    margin: 0 5%;
+  }
+
+  .sub-main-content {
+    grid-template-columns: 1fr;
+    grid-template-rows: auto;
+  }
+
+  .img-close {
+    display: none;
+  }
+
+  .sub1-main-content,
+  .sub2-main-content {
+    padding: 15px;
+  }
+}
+
+/* Styles for Extra Small Screens */
+@media screen and (max-width: 496px) {
+  main {
+    grid-template-columns: 1fr;
+    grid-template-rows: auto auto auto auto;
+  }
+
+  .display-options {
+    left: auto;
+    right: 100%;
+  }
+
+  .navbar {
+    grid-column: 1;
+    padding: 5px;
+  }
+
+  .sidebar {
+    display: none;
+  }
+  .sub-main-content {
+    grid-template-columns: 1fr;
+    grid-template-rows: auto;
+  }
+
+  .sub1-main-content,
+  .sub2-main-content {
+    padding: 10px;
+  }
+}

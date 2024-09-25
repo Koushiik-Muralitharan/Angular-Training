@@ -1,0 +1,23 @@
+<main>
+    <section class="bringova-logo">
+     <div class="img-close">
+       <img src="./assets/images/bingova.jpg" alt="logo">
+     </div>
+    </section>
+    <section class="navbar">
+       <app-navbar></app-navbar>
+    </section>
+    <section class="sidebar">
+       <app-sidebar></app-sidebar>
+    </section>
+    <section class="main-content">
+      <div class="sub-main-content">
+        <div class="sub1-main-content">
+            <app-live-orders></app-live-orders>
+        </div>
+        <div class="sub2-main-content">
+            <app-orders (SelectedCancel)="onSelected($event)" [clicks]="clicked"></app-orders>
+        </div>
+      </div>
+    </section>
+</main>

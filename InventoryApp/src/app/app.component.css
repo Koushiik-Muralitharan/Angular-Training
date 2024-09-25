@@ -1,0 +1,103 @@
+:host{
+    --add-button-color:rgb(51, 163, 255) ;
+    --edit-button-color: rgb(137, 137, 252);
+    --delete-button-color: rgb(253, 67, 67);
+}
+
+*{
+    margin: 0px;
+    padding: 0px;
+    box-sizing: border-box;
+}
+
+main{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+h1{
+    text-align: center;
+    padding: 10px;
+}
+.main-container{
+   border: 1px solid black;
+   width: 70%;
+   padding: 20px 10px ;
+}
+
+button{
+    margin: 10px;
+}
+
+.handel-error{
+   display: flex;
+   flex-direction: column;
+}
+
+.span-height{
+    display: inline-block;
+    color: red;
+    height: 20px;
+}
+
+input,select{
+    padding: 5px;
+}
+
+.add-user-btn, .update-user-btn{
+    border: none;
+    border-radius: 5px ;
+    padding: 10px 5px;
+    background-color: var(--add-button-color);
+    margin-bottom: 3%;
+}
+
+.edit-user-btn{
+    border:none;
+    border-radius: 5px ;
+    padding: 10px 15px;
+    background-color: var(--edit-button-color);
+}
+
+.delete-user-btn{
+    border:none;
+    border-radius: 5px ;
+    padding: 10px 5px;
+    background-color:var(--delete-button-color);
+}
+
+form{
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    gap: 15px;
+}
+
+.users-display{
+    margin: 10px;
+}
+
+table{
+    border-collapse: separate;
+    border-spacing: 0px 10px ;
+    width: 100%;
+    text-align: center;
+}
+
+th{
+    padding: 5px;
+}
+
+tr{
+    background-color: rgb(203, 255, 255);
+}
+
+p{
+    opacity: 0;
+}
+
+.display-error{
+    opacity: 1;
+    color: red;
+}

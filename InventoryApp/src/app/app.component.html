@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Inventory</title>
+</head>
+<body>
+  <main>
+    <div class="main-container">
+      <h1>Inventory Mangement</h1>
+           <form>
+            <div class="handel-error">
+              <label for="emp-name">
+                Name:
+                <input type="text" name="emplyee-name" id="emp-name" [(ngModel)]="userName" placeholder=" Enter your name">
+              </label>
+              <span class="span-height">
+                <span *ngIf="nameError">{{nameError}}</span>
+              </span>
+            </div>
+            
+            
+            <div class="handel-error">
+              <label for="emp-email">
+                Email:
+                <input type="text" name="employee-email" id="emp-email" [(ngModel)]="userEmail" placeholder=" Enter your email">
+              </label>
+              <span class="span-height">
+                <span *ngIf="emailError">{{emailError}}</span>
+              </span>
+            </div>
+
+            <div class="handel-error">
+              <label for="emp-role">
+                Role:
+                <select name="emplyee-role" [(ngModel)]="userRole" id="emp-role">
+                  <option value="user">User</option>
+                  <option value="admin">Admin</option>
+                </select>
+              </label>
+              <span class="span-height">
+                <span *ngIf="roleError">{{roleError}}</span>
+              </span>
+            </div>
+            <button type="button" (click)="addUser()" *ngIf="userEditIndex===null" class="add-user-btn">Add User</button>
+            <button type="button" class="update-user-btn" *ngIf="userEditIndex !== null" (click)="onUpdate()">Update Task</button>
+           </form>
+           <p [ngClass]="{'display-error': !userExists }">User already exists ...</p>
+
+           <div class="users-display">
+            <table>
+              <thead>
+                <tr>
+                  <th>S.no</th>
+                  <th>Name</th>
+                  <th>Email</th>
+                  <th>Role</th>
+                  <th colspan="2">Actions</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr *ngFor="let user of userArray; let i = index">
+                  <td>{{i+1}}</td>
+                  <td>{{user.name}}</td>
+                  <td>{{user.email}}</td>
+                  <td>{{user.role}}</td>
+                  <td><button (click)="editUser(i)" class="edit-user-btn">Edit</button> <button (click)="deleteUser(i)" class="delete-user-btn">Delete</button></td>
+                </tr>
+              </tbody>
+            </table>
+           </div>
+    </div>
+  </main>
+</body>
+</html>
