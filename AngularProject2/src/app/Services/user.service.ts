@@ -36,7 +36,9 @@ export class UserService {
         name:username,
         email:useremail,
         pno:userphno,
-        password:userpassword,
+        password:userpassword, 
+        transactions:[],
+        goals:[]
       }
       const usersArray: userdetails[] = this.userStorage.getUser();
       usersArray.push(newUser);

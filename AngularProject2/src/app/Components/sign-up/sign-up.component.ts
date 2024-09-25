@@ -17,8 +17,8 @@ export class SignUpComponent  {
     onSubmit(form:NgForm)
     {
       this.userServices.addUser(form);
-      console.log(form.value);
-      console.log(form)
+      //console.log(form.value);
+      //console.log(form)
       
     }
 }

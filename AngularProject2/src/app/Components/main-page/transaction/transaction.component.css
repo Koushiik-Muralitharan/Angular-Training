@@ -1,0 +1,32 @@
+.form-elements{
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+}
+
+.align-button{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+form{
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+    margin: 2%;
+    padding: 10px;
+    border: 2px solid black;
+    border-radius: 5px;
+}
+
+button{
+    padding: 5px 10px;
+}
+
+select.ng-invalid.ng-touched, input.ng-invalid.ng-touched{
+    border: 1px solid red;
+}
+small{
+    color: red;
+}
