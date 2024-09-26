@@ -8,6 +8,8 @@ export interface userdetails{
     pno:string;
     password:string;
     transactions: transactionDetails[];
-    goals: goalDetails[]
-    
+    goals: goalDetails[];
+    balance: number;
+    income: number;
+    expense: number;  
   }
