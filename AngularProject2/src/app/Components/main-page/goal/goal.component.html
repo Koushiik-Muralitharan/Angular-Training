@@ -1,1 +1,82 @@
 <p>goal works!</p>
+
+<button (click)="addGoal()">Add Goal</button>
+<div *ngIf="addGoalPopUp" class="overlay">
+  <div *ngIf="addGoalPopUp" [ngClass]="{'add-goal-pop-up': addGoalPopUp, }">
+    <p class="align-close">
+      <button class="close-button" (click)="addGoal()">X</button>
+    </p>
+    <div>
+      <p>
+        Remaining Balance: <span>{{ currentBalance }}</span>
+      </p>
+    </div>
+    <form #goaldata="ngForm" (submit)="onGoalSubmit(goaldata)">
+      <div class="form-elements">
+        <label for="gname">Goal Name</label>
+        <input
+          type="text"
+          name="goalname"
+          id="gname"
+          placeholder=" Goal Name"
+          ngModel
+          required
+          pattern="^[^\d]*$"
+          #gfname="ngModel"
+        />
+        <div *ngIf="gfname.invalid && gfname.touched">
+            <small *ngIf="gfname.errors?.['required']"
+              >*goal name is a required field</small
+            >
+            <small *ngIf="gfname.errors?.['pattern']">*Enter a valid name</small>
+          </div>
+      </div>
+
+      <div class="form-elements">
+        <label for="gamount">Target Amount</label>
+        <input
+          type="text"
+          name="goalamount"
+          id="gamount"
+          placeholder=" Goal Amount"
+          ngModel
+          required
+          pattern="^[0-9]+$"
+          #gfamount="ngModel"
+        />
+        <div *ngIf="gfamount.invalid && gfamount.touched">
+            <small *ngIf="gfamount.errors?.['required']"
+              >*Amount is a required field</small
+            >
+            <small *ngIf="gfamount.errors?.['pattern']">*Enter a valid  amount</small>
+          </div>
+      </div>
+
+      <div class="form-elements">
+        <label for="gcontribution">Initial Contribution</label>
+        <input
+          type="text"
+          name="initalcontribution"
+          id="gcontribution"
+          placeholder=" Goal Contribution"
+          ngModel
+          #gfcontribution="ngModel"
+        />
+        <div *ngIf="
+          (gfcontribution.value > currentBalance ||  isContributionValid(gfcontribution.value, gfamount.value)) &&
+          gfcontribution.dirty
+        ">
+           <small>
+                  *Contribution is greater than the balance or amount. 
+           </small>
+
+        </div>
+      </div>
+
+      <div class="align-buttons">
+        <button type="submit" [disabled]="!goaldata.valid || gfcontribution.value > currentBalance || isContributionValid(gfcontribution.value, gfamount.value)">Add</button>
+        <button>Cancel</button>
+      </div>
+    </form>
+  </div>
+</div>

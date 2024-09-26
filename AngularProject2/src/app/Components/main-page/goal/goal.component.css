@@ -1,0 +1,61 @@
+button{
+    padding: 10px;
+}
+
+.add-goal-pop-up{
+    display: block;
+    position: fixed ;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 1px;
+    background-color: aquamarine;
+    border: 1px solid black;
+    padding: 20px;
+}
+
+.overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);  
+    backdrop-filter: blur(5px);  
+    z-index: 0;  
+  }
+  .close-button{
+    border: none;
+    background-color: aquamarine;
+    padding: 0px;
+    margin: 5px;
+  }
+  .align-close{
+    display: flex;
+    justify-content: flex-end;
+  }
+
+  .form-elements{
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+  }
+
+  form{
+    display: flex;
+    flex-direction: column ;
+    gap: 15px;
+  }
+
+  .align-buttons{
+    display: flex;
+    justify-content: space-around;
+  }
+
+  small{
+    color: red;
+  }
+
+  input.ng-invalid.ng-touched{
+    border: 1px solid red;
+  }

@@ -78,6 +78,7 @@ export class TranactionsService {
       const index = this.getLoggedUserIndex();
       userArray[index].income = 0;
       userArray[index].expense = 0;
+      userArray[index].balance = 0;
       tranactions.forEach((tranaction) => {
         if (tranaction.transactionMethod === 'Income') {
           userArray[index].income += tranaction.amount;
@@ -85,7 +86,9 @@ export class TranactionsService {
           userArray[index].expense += tranaction.amount;
         }
       });
+      userArray[index].balance = userArray[index].income - userArray[index].expense;
       this.userStorage.setUser(userArray);
+      //this.getCurrentBalance();
     } else {
       console.log('no such user exists...');
     }
@@ -123,4 +126,10 @@ export class TranactionsService {
 
     this.userStorage.setUser(userArray);
   }
+
+  getCurrentBalance():number{
+    const userArray: userdetails[] = this.userStorage.getUser();
+    const index: number = this.getLoggedUserIndex();
+    return userArray[index].balance;
+   }
 }
