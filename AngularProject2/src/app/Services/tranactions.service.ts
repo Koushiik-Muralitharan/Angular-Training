@@ -2,11 +2,13 @@ import { Injectable } from '@angular/core';
 import { NgForm } from '@angular/forms';
 import { transactionDetails } from '../models/Transactionmodel';
 import { userdetails } from '../models/Usermodel';
+import { goalDetails } from '../models/goalsmodal';
 import { UserStorageService } from '../Storage/user-storage.service';
 @Injectable({
   providedIn: 'root',
 })
 export class TranactionsService {
+  public goalChanges = false;
   private expenseOptions: Record<'Income' | 'Expense', string[]> = {
     Income: ['Salary', 'Bonus', 'Investment'],
     Expense: ['Food', 'Transport', 'Shopping', 'Entertainment'],
@@ -86,7 +88,7 @@ export class TranactionsService {
           userArray[index].expense += tranaction.amount;
         }
       });
-      userArray[index].balance = userArray[index].income - userArray[index].expense;
+      userArray[index].balance = userArray[index].income - (userArray[index].expense + this.totalSavings());
       this.userStorage.setUser(userArray);
       //this.getCurrentBalance();
     } else {
@@ -132,4 +134,53 @@ export class TranactionsService {
     const index: number = this.getLoggedUserIndex();
     return userArray[index].balance;
    }
+
+   addGoals(form:NgForm):void{
+    const userArray: userdetails[] = this.userStorage.getUser();
+    const index: number = this.getLoggedUserIndex();
+    const {goalname,goalamount,initalcontribution} = form.value;
+
+    const newGoal: goalDetails = {
+      gid: Date.now() + '',
+      id: userArray[index].id,
+      name: goalname,
+      gamount: parseInt(goalamount),
+      camount: parseInt(initalcontribution) || 0
+    }
+
+    userArray[index].goals.push(newGoal);
+    this.userStorage.setUser(userArray);
+    this.goalChanges = true;
+    }
+
+    getGoalInfo(gindex: number):goalDetails{
+       const userArray = this.userStorage.getUser();
+       const index = this.getLoggedUserIndex();
+       return userArray[index].goals[gindex];
+
+    }
+
+    totalSavings(): number{
+      const userArray: userdetails[] = this.userStorage.getUser();
+      const index: number = this.getLoggedUserIndex();
+
+      var savings = 0;
+
+      userArray[index].goals.forEach((goal)=>{
+        savings+= goal.camount;
+      })
+      console.log("Savings:"+savings)
+
+      return savings;
+    }
+
+    UpdateContribution(form:NgForm, gindex:number){
+      const userArray: userdetails[] = this.userStorage.getUser();
+      const index: number = this.getLoggedUserIndex();
+      const {ContributionAmount} = form.value;
+      userArray[index].goals[gindex].camount+= Number(ContributionAmount);
+      this.userStorage.setUser(userArray);
+      this.goalChanges=true;
+      
+    }
 }

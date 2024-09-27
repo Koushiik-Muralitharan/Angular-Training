@@ -39,12 +39,20 @@ export class TransactionComponent  {
     this.updateTransactionSummary();
   }
 
+  ngDoCheck(): void{
+    if(this.transactionService.goalChanges){
+      this.loadTransactions();
+      this.updateTransactionSummary();
+      this.transactionService.goalChanges = false;
+    }
+  }
+
   updateTransactionSummary(): void {
     const index = this.transactionService.getLoggedUserIndex();
     const userArray: userdetails[] = this.userStorage.getUser();
     this.income = userArray[index].income;
     this.expense = userArray[index].expense;
-    this.balance = this.income-this.expense;
+    this.balance = userArray[index].balance;
   }
   
   onTransactionTypeChange(type: string): void {
