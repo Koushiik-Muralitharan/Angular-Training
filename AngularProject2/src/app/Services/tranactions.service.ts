@@ -163,14 +163,11 @@ export class TranactionsService {
     totalSavings(): number{
       const userArray: userdetails[] = this.userStorage.getUser();
       const index: number = this.getLoggedUserIndex();
-
       var savings = 0;
-
       userArray[index].goals.forEach((goal)=>{
         savings+= goal.camount;
       })
-      console.log("Savings:"+savings)
-
+      //console.log("Savings:"+savings);
       return savings;
     }
 
@@ -182,5 +179,13 @@ export class TranactionsService {
       this.userStorage.setUser(userArray);
       this.goalChanges=true;
       
+    }
+
+    deleteGoal(gindex:number){
+      const userArray: userdetails[] = this.userStorage.getUser();
+      const index: number = this.getLoggedUserIndex();
+      userArray[index].goals.splice(gindex,1);
+      this.userStorage.setUser(userArray);
+      this.goalChanges=true;
     }
 }

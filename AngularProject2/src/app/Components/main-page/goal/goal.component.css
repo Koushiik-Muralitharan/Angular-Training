@@ -14,6 +14,17 @@ button{
     padding: 20px;
 }
 
+.congrats-pop-up{
+  position: fixed ;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 1px;
+    background-color: aquamarine;
+    border: 1px solid black;
+    padding: 20px;
+}
+
 .overlay {
     position: fixed;
     top: 0;
@@ -66,4 +77,8 @@ button{
     flex-direction: column;
     gap: 5px;
     margin: 2%;
+  }
+
+  .goal-completion{
+    background-color: green;
   }

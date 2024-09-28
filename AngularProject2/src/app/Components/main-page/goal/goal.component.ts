@@ -22,7 +22,7 @@ export class GoalComponent {
     goaltarget!: number;
     goalContributed!:number;
     gindex!:number;
-    // transactions!: TransactionComponent;
+    gCongrats!: Boolean;
 
     constructor(private userStorage:UserStorageService, private transactionService: TranactionsService){}
     ngOnInit():void{
@@ -35,7 +35,6 @@ export class GoalComponent {
     this.addGoalPopUp = !this.addGoalPopUp;
     this.currentBalance = this.transactionService.getCurrentBalance();
     this.transactionService.calculateTransaction();
-    //this.transactions.ngOnInit();
    } 
 
    closeContribution(){
@@ -46,7 +45,6 @@ export class GoalComponent {
     this.contributeGoalPopUp = !this.contributeGoalPopUp;
     this.transactionService.calculateTransaction();
     const CurrentGoal = this.transactionService.getGoalInfo(gindex);
-    //console.log(CurrentGoal.gamount);
     this.currentBalance = this.transactionService.getCurrentBalance();
     this.goaltarget = CurrentGoal.gamount;
     this.goalContributed = CurrentGoal.camount;
@@ -55,20 +53,33 @@ export class GoalComponent {
    }
 
    onGoalSubmit(form:NgForm){
-    console.log(form);
     this.transactionService.addGoals(form);
     this.loadGoals();
     this.addGoal();
     this.transactionService.calculateTransaction();
+    const userArray = this.userStorage.getUser();
+    const index = this.transactionService.getLoggedUserIndex();
+    this.congratulationsPopUp(userArray[index].goals.length-1);
+    
    }
 
    onContributionSubmit(form: NgForm){
-    console.log('contribution submitted');
-    console.log(form);
-    console.log(this.gindex);
+    //console.log('contribution submitted');
+    //console.log(form);
+    //console.log(this.gindex);
     this.transactionService.UpdateContribution(form, this.gindex);
     this.loadGoals();
     this.closeContribution();
+    this.congratulationsPopUp(this.gindex);
+   }
+
+   congratulationsPopUp(gindex:number):void{
+     this.gCongrats = this.goalStatusCheck(gindex);
+     //console.log("Congratulations pop up.");
+   }
+
+   closeCongrats(){
+    this.gCongrats = !this.gCongrats;
    }
 
    isContributionValid(gfcontribution: string, gfamount: string): boolean {
@@ -96,6 +107,31 @@ export class GoalComponent {
       return true;
     }
     return false;
+  }
+
+  deleteGoal(gindex:number){
+    this.transactionService.deleteGoal(gindex);
+    this.loadGoals();
+    this.transactionService.calculateTransaction();
+  }
+
+  goalStatusCheck(gindex:number):Boolean{
+    const userArray = this.userStorage.getUser();
+    const index = this.transactionService.getLoggedUserIndex();
+    const  goal = userArray[index].goals[gindex];
+    //console.log("Goal amount:"+goal.gamount)
+    if(goal.gamount === goal.camount){
+       return true;
+    }
+    return false;
+  }
+
+  checkGoalName(goalName: string):Boolean{
+    const userArray = this.userStorage.getUser();
+    const index = this.transactionService.getLoggedUserIndex();
+    const goal = userArray[index].goals;
+
+    return goal.some((g)=> g.name === goalName);
   }
    
 }

@@ -1,6 +1,6 @@
-<p>goal works!</p>
 
 <button (click)="addGoal()">Add Goal</button>
+
 <div *ngIf="addGoalPopUp" class="overlay">
   <div *ngIf="addGoalPopUp" [ngClass]="{'add-goal-pop-up': addGoalPopUp, }">
     <p class="align-close">
@@ -24,11 +24,13 @@
           pattern="^[^\d]*$"
           #gfname="ngModel"
         />
-        <div *ngIf="gfname.invalid && gfname.touched">
+        <div *ngIf="gfname.invalid && gfname.touched && gfname.dirty">
           <small *ngIf="gfname.errors?.['required']"
-            >*goal name is a required field</small
-          >
+            >*goal name is a required field</small>
           <small *ngIf="gfname.errors?.['pattern']">*Enter a valid name</small>
+        </div>
+        <div *ngIf="checkGoalName(gfname.value)">
+          <small>*goal name is already present.</small>
         </div>
       </div>
 
@@ -57,12 +59,13 @@
       <div class="form-elements">
         <label for="gcontribution">Initial Contribution</label>
         <input
-          type="text"
+          type="number"
           name="initalcontribution"
           id="gcontribution"
           placeholder=" Goal Contribution"
           ngModel
           pattern="^[0-9]+$"
+          min="0"
           #gfcontribution="ngModel"
         />
         <div
@@ -88,7 +91,8 @@
           [disabled]="
             !goaldata.valid ||
             gfcontribution.value > currentBalance ||
-            isContributionValid(gfcontribution.value, gfamount.value)
+            isContributionValid(gfcontribution.value, gfamount.value) ||
+            checkGoalName(gfname.value)
           "
         >
           Add
@@ -96,6 +100,13 @@
         <button type="button">Cancel</button>
       </div>
     </form>
+  </div>
+</div>
+
+<div *ngIf="gCongrats" class="overlay">
+  <div class="congrats-pop-up">
+    <button (click)="closeCongrats()">X</button>
+    <span>Completed the goal successfully !</span>
   </div>
 </div>
 
@@ -158,10 +169,11 @@
 </div>
 
 <div>
-  <div class="goal-card" *ngFor="let goal of goalsArray; let i = index">
+  <div class="goal-card" *ngFor="let goal of goalsArray; let i = index" [ngClass]="{'goal-completion': goalStatusCheck(i)}">
     <span>Goal name: {{ goal.name }}</span>
     <span>Goal amount: {{ goal.gamount }}</span>
     <span>Goal contribution: {{ goal.camount }}</span>
-    <div><button (click)="addContribution(i)">+</button></div>
+    <div *ngIf="!goalStatusCheck(i)"><button (click)="addContribution(i)">+</button></div>
+    <div><button (click)="deleteGoal(i)">Delete</button></div>
   </div>
 </div>
