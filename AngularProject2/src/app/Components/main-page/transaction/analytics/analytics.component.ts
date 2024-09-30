@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, Input, SimpleChanges } from '@angular/core';
 import { Chart, PieController, ArcElement, Legend, Tooltip, Title, } from "chart.js";
 import { TranactionsService } from '../../../../Services/tranactions.service';
 import { UserStorageService } from '../../../../Storage/user-storage.service';
@@ -10,15 +10,34 @@ import { UserStorageService } from '../../../../Storage/user-storage.service';
   styleUrl: './analytics.component.css'
 })
 export class AnalyticsComponent {
+
+  @Input() refreshData: boolean = false;
+  chart: any;
+  @Input() labelArray:number[] =[];
+  @Input() chartLabels: string[] = [];
+  @Input() chartColors: string[] = [];
+
   constructor(private transactionService: TranactionsService, private userStorage: UserStorageService){
 
   }
   ngAfterViewInit() {
+    this.renderChart();
+  }
+
+  ngOnChanges(changes: SimpleChanges) {
+    if (changes['refreshData'] && !changes['refreshData'].firstChange) {
+      console.log(changes);
+      this.updateChart();
+    }
+  }
+  
+  renderChart(){
     const userArray = this.userStorage.getUser();
     const index = this.transactionService.getLoggedUserIndex();
     const income = userArray[index].income;
     const canvas = document.getElementById("myChart") as HTMLCanvasElement;
     Chart.register(PieController, ArcElement, Title, Legend, Tooltip);
+    console.log("Hi "+ this.labelArray);
     if (canvas) {
       const ctx = canvas.getContext("2d");
       if (ctx) {
@@ -27,7 +46,10 @@ export class AnalyticsComponent {
           datasets: [
             {
               backgroundColor: ["#b91d47", "#00aba9", "#2b5797", "#e8c3b9"],
-              data: [(this.transactionService.calculateAnalytics().foodCost/income)*100, , , ],
+              data: [(this.transactionService.calculateAnalytics().foodCost/income)*100,
+                (this.transactionService.calculateAnalytics().transportCost/income)*100 ,
+                (this.transactionService.calculateAnalytics().shoppingCost/income)*100 ,
+                (this.transactionService.calculateAnalytics().entertainmentCost/income)*100 ],
             },
           ],
         };
@@ -48,8 +70,17 @@ export class AnalyticsComponent {
             },
           },
         };
-        new Chart(ctx, config);
+        this.chart=new Chart(ctx, config);
       }
+    }
+  }
+
+  updateChart() {
+    if (this.chart) {
+      this.chart.data.datasets[0].data = this.labelArray;
+      this.chart.data.datasets[0].backgroundColor = this.chartColors;
+      this.chart.data.labels = this.chartLabels;
+      this.chart.update();
     }
   }
 }

@@ -1,20 +1,30 @@
 <main>
   <div class="top-elements">
     <p>
-      Income: <span> {{ income }}</span>
+      Income: <span> {{ income }}$</span>
     </p>
     <p>
-      Expense: <span> {{ expense }}</span>
+      Expense: <span> {{ expense }}$</span>
     </p>
     <p>
-      Balance: <span> {{ balance }}</span>
+      Balance: <span> {{ balance }}$</span>
     </p>
     <span class="add-transacation" (click)="transactionModal()">
       <i class="fa-solid fa-plus"></i> Transaction
     </span>
   </div>
+  <div class="statistics">
+    <h2>Statistics</h2>
   <div class="align-analytics">
-    <app-analytics></app-analytics>
+    <div class="button-container">
+      <button (click)="onChartChange('Food')">Food</button>
+      <button (click)="onChartChange('Transport')">transport</button>
+      <button (click)="onChartChange('Entertainment')">Entertainment</button>
+      <button (click)="onChartChange('Shopping')">Shopping</button>
+      <button (click)="onChartChange('Expense')">Show All</button>
+    </div>
+    <app-analytics [refreshData]="refreshFlag" [labelArray]="chartLabels" [chartLabels]="chartDataLabels" [chartColors]="chartColors"></app-analytics>
+  </div>
   </div>
   <div *ngIf="transactionPopUp" class="overlay">
     <div class="transactionsModal">
@@ -132,6 +142,7 @@
   </div>
 
   <div>
+    <h2>Transaction History</h2>
     <table>
       <thead>
         <tr>

@@ -6,6 +6,7 @@ import { transactionDetails } from '../../../models/Transactionmodel';
 import { UserStorageService } from '../../../Storage/user-storage.service';
 import { userdetails } from '../../../models/Usermodel';
 import { AnalyticsComponent } from './analytics/analytics.component';
+import { analyticsDetails } from '../../../models/analyticsmodal';
 @Component({
   selector: 'app-transaction',
   standalone: true,
@@ -16,6 +17,9 @@ import { AnalyticsComponent } from './analytics/analytics.component';
 export class TransactionComponent  {
   transactionType: string = '';
   expenseTypes: string[] = [];
+  chartLabels: number[] = [];
+  chartColors: string[] = [];
+  chartDataLabels: string[] = [];
   balance:number=0;
   income:number=0;
   expense:number=0;
@@ -27,6 +31,7 @@ export class TransactionComponent  {
   ButtonName:string = 'Submit';
   currentDate!: string;
   transactionPopUp:Boolean = false;
+  refreshFlag:boolean = false;
 
   constructor(private transactionService: TranactionsService,private userStorage:UserStorageService) {
    
@@ -53,6 +58,10 @@ export class TransactionComponent  {
     return this.transactionPopUp= !this.transactionPopUp;
   }
 
+  refreshContent() {
+    this.refreshFlag = !this.refreshFlag; 
+  }
+
   updateTransactionSummary(): void {
     const index = this.transactionService.getLoggedUserIndex();
     const userArray: userdetails[] = this.userStorage.getUser();
@@ -69,6 +78,31 @@ export class TransactionComponent  {
     }
   }
 
+  // onChartChange(type: string):void {
+  //   if(type === 'Food' || type === 'Transport' || type === 'Shopping' || type === 'Entertainment' || type === 'Expense'){
+  //     this.chartLabels = this.transactionService.getChartLabelType(type);
+  //   }else{
+  //     this.chartLabels = [];
+  //   }
+  //   console.log(this.chartLabels);
+  //   this.refreshContent();
+  // }
+
+
+  onChartChange(type: string): void {
+    if (type === 'Food' || type === 'Transport' || type === 'Shopping' || type === 'Entertainment' || type === 'Expense') {
+      const analytics = this.transactionService.getAnalyticsOption(type);
+      this.chartLabels = analytics.data;
+      this.chartColors = analytics.colors;
+      this.chartDataLabels = analytics.labels;
+    } else {
+      this.chartLabels = [];
+      this.chartColors = [];
+      this.chartDataLabels = [];
+    }
+    this.refreshContent();
+  }
+
   edit(tindex:number){
     console.log(tindex);
      const index = this.transactionService.getLoggedUserIndex();
@@ -80,7 +114,7 @@ export class TransactionComponent  {
      this.transactionDate = userArray[index].transactions[tindex].date;
      this.selectedTransactionIndex = tindex;
      this.ButtonName='Update';
-
+     this.transactionModal();
    }
 
    delete(index:number){
@@ -89,6 +123,7 @@ export class TransactionComponent  {
    this.loadTransactions();
    this.transactionService.calculateTransaction();
    this.updateTransactionSummary();
+   this.refreshContent();
    }
 
   onTransactionSubmit(form:NgForm){
@@ -98,8 +133,10 @@ export class TransactionComponent  {
       this.transactionService.editTransaction(this.selectedTransactionIndex, form);
       this.selectedTransactionIndex=null;
       this.ButtonName='Submit';
+      this.refreshContent();
     }else{
       this.transactionService.addTransaction(form);
+      this.refreshContent();
     }
     
     this.loadTransactions();

@@ -18,11 +18,15 @@ export class GoalComponent {
     goalsArray: goalDetails[] =[];
     addGoalPopUp:Boolean = false;
     contributeGoalPopUp:Boolean = false;
+    updateGoalPopUp:Boolean = false;
     currentBalance!: number;
     goaltarget!: number;
     goalContributed!:number;
     gindex!:number;
     gCongrats!: Boolean;
+    editGoalAmount!: number;
+    editGoalName!: string;
+    editGoalIndex!: number;
 
     constructor(private userStorage:UserStorageService, private transactionService: TranactionsService){}
     ngOnInit():void{
@@ -41,6 +45,14 @@ export class GoalComponent {
     this.contributeGoalPopUp = !this.contributeGoalPopUp;
    }
 
+   updateGoal(gindex:number = -1){
+    this.updateGoalPopUp = !this.updateGoalPopUp;
+    console.log("goal index: "+ gindex);
+    if(gindex>-1){
+      this.editGoal(gindex);
+    }
+   }
+
    addContribution(gindex:number){
     this.contributeGoalPopUp = !this.contributeGoalPopUp;
     this.transactionService.calculateTransaction();
@@ -49,7 +61,6 @@ export class GoalComponent {
     this.goaltarget = CurrentGoal.gamount;
     this.goalContributed = CurrentGoal.camount;
     this.gindex=gindex;
-    
    }
 
    onGoalSubmit(form:NgForm){
@@ -130,8 +141,25 @@ export class GoalComponent {
     const userArray = this.userStorage.getUser();
     const index = this.transactionService.getLoggedUserIndex();
     const goal = userArray[index].goals;
-
     return goal.some((g)=> g.name === goalName);
   }
+
+  goalUpdate(form:NgForm){
+    this.transactionService.editUserGoal(this.editGoalIndex,form);
+    //console.log(this.editGoalIndex);
+    this.loadGoals();
+  }
+
+  editGoal(gindex:number):void{
+    this.editGoalIndex=gindex;
+    const userArray = this.userStorage.getUser();
+    const index = this.transactionService.getLoggedUserIndex();
+    this.editGoalName = userArray[index].goals[gindex].name;
+    this.editGoalAmount = userArray[index].goals[gindex].gamount;
+  }
+
+
+
+
    
 }

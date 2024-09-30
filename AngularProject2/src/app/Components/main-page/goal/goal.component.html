@@ -1,6 +1,8 @@
-
-<button class="add-goal" (click)="addGoal()"><i class="fa-solid fa-sack-dollar"></i></button>
-
+<h2>Savings</h2>
+<button class="add-goal" (click)="addGoal()">
+  <i class="fa-solid fa-sack-dollar"></i>
+</button>
+<!-- add goal pop up -->
 <div *ngIf="addGoalPopUp" class="overlay">
   <div *ngIf="addGoalPopUp" [ngClass]="{'add-goal-pop-up': addGoalPopUp, }">
     <p class="align-close">
@@ -26,7 +28,8 @@
         />
         <div *ngIf="gfname.invalid && gfname.touched && gfname.dirty">
           <small *ngIf="gfname.errors?.['required']"
-            >*goal name is a required field</small>
+            >*goal name is a required field</small
+          >
           <small *ngIf="gfname.errors?.['pattern']">*Enter a valid name</small>
         </div>
         <div *ngIf="checkGoalName(gfname.value)">
@@ -103,6 +106,7 @@
   </div>
 </div>
 
+<!-- congrats pop up -->
 <div *ngIf="gCongrats" class="overlay">
   <div class="congrats-pop-up">
     <button (click)="closeCongrats()">X</button>
@@ -110,6 +114,7 @@
   </div>
 </div>
 
+<!-- contribution pop up -->
 <div *ngIf="contributeGoalPopUp" class="overlay">
   <div
     *ngIf="contributeGoalPopUp"
@@ -135,53 +140,111 @@
     >
       <div>
         <label for="contributeamount">Contribution Amount</label>
-      <input
-        type="text"
-        id="contributeamount"
-        name="ContributionAmount"
-        #gcfamount ="ngModel"
-        ngModel
-        required
-        pattern="^(0|[1-9][0-9]*)$"
-      />
+        <input
+          type="text"
+          id="contributeamount"
+          name="ContributionAmount"
+          #gcfamount="ngModel"
+          ngModel
+          required
+          pattern="^(0|[1-9][0-9]*)$"
+        />
 
-      <div *ngIf="gcfamount.invalid && gcfamount.touched">
-        <small *ngIf="gcfamount.errors?.['required']"
-          >*amount is a required field</small
-        >
-        <small *ngIf="gcfamount.errors?.['pattern']">*Enter a valid amount</small>
-      </div>
-      <div *ngIf=" goalContributionCheck(gcfamount.value)">
-        <small>*This contribution will exceed the target</small>
-      </div>
-      <div *ngIf=" contributionGreater(gcfamount.value)">
-        <small>*This contribution will exceed the balance</small>
-      </div>
-
+        <div *ngIf="gcfamount.invalid && gcfamount.touched">
+          <small *ngIf="gcfamount.errors?.['required']"
+            >*amount is a required field</small
+          >
+          <small *ngIf="gcfamount.errors?.['pattern']"
+            >*Enter a valid amount</small
+          >
+        </div>
+        <div *ngIf="goalContributionCheck(gcfamount.value)">
+          <small>*This contribution will exceed the target</small>
+        </div>
+        <div *ngIf="contributionGreater(gcfamount.value)">
+          <small>*This contribution will exceed the balance</small>
+        </div>
       </div>
 
       <div class="align-buttons">
-        <button type="submit" [disabled]="!contributiondata.valid || goalContributionCheck(gcfamount.value) || contributionGreater(gcfamount.value)">Add</button>
+        <button
+          type="submit"
+          [disabled]="
+            !contributiondata.valid ||
+            goalContributionCheck(gcfamount.value) ||
+            contributionGreater(gcfamount.value)
+          "
+        >
+          Add
+        </button>
         <button type="button">Cancel</button>
       </div>
     </form>
   </div>
 </div>
 
+<!-- update goal -->
+<div *ngIf="updateGoalPopUp" class="overlay">
+  <div class="update-pop-up">
+    <span (click)="updateGoal()">X</span>
+    <form #editGoalForm="ngForm" (submit)="goalUpdate(editGoalForm)">
+      <p>
+        <label for="editGoalName">goal Name</label>
+        <input type="text" name="eGoalName" id="editGoalName" required pattern="^[^\d]*$" [(ngModel)]="editGoalName" />
+      </p>
+
+      <p>
+        <label for="editGoalAmount">Goal Amount</label>
+        <input type="number" min="0" name="eGoalAmount" id="editGoalAmount" required [(ngModel)]="editGoalAmount" />
+      </p>
+
+      <button [disabled]="!editGoalForm.valid">Update</button>
+    </form>
+  </div>
+</div>
+
+<!-- display goal cards -->
+
 <div>
-  <div class="goal-card" *ngFor="let goal of goalsArray; let i = index" [ngClass]="{'goal-completion': goalStatusCheck(i)}">
+  <div
+    class="goal-card"
+    *ngFor="let goal of goalsArray; let i = index"
+    [ngClass]="{ 'goal-completion': goalStatusCheck(i) }"
+  >
     <span class="goal-heading">{{ goal.name }}</span>
-    <!-- <span>Goal amount: {{ goal.gamount }}</span>
-    <span>Goal contribution: {{ goal.camount }}</span> -->
-    <progress [value]="((goal.camount/goal.gamount)*100)" max="100"></progress>
+    <progress
+      [value]="(goal.camount / goal.gamount) * 100"
+      max="100"
+    ></progress>
     <div class="goal-footer">
-      <div>Progress: <span>{{(goal.camount / goal.gamount) * 100 | number:'1.0-2'}}%</span></div>
-    <div class="align-icons">
-    <div *ngIf="!goalStatusCheck(i)"><span (click)="addContribution(i)"><i class="fa-solid fa-plus"></i></span></div>
-    
-    <div  *ngIf="goalStatusCheck(i)"><span>Goal Amount: {{goal.camount}}</span></div>
-    <div><span (click)="deleteGoal(i)"><i class="fa-regular fa-trash-can"></i></span></div>
-    </div>
+      <div>
+        Progress:
+        <span
+          >{{ (goal.camount / goal.gamount) * 100 | number : "1.0-2" }}%</span
+        >
+      </div>
+      <div class="align-icons">
+        <div *ngIf="!goalStatusCheck(i)">
+          <span (click)="addContribution(i)"
+            ><i class="fa-solid fa-plus"></i
+          ></span>
+        </div>
+        <div *ngIf="goalStatusCheck(i)">
+          <span
+            ><i class="fa-solid fa-piggy-bank"></i>: {{ goal.camount }}$</span
+          >
+        </div>
+        <div>
+          <span (click)="updateGoal(i)"
+            ><i class="fa-regular fa-pen-to-square"></i
+          ></span>
+        </div>
+        <div>
+          <span (click)="deleteGoal(i)"
+            ><i class="fa-regular fa-trash-can"></i
+          ></span>
+        </div>
+      </div>
     </div>
   </div>
 </div>

@@ -4,6 +4,7 @@ import { transactionDetails } from '../models/Transactionmodel';
 import { userdetails } from '../models/Usermodel';
 import { goalDetails } from '../models/goalsmodal';
 import { UserStorageService } from '../Storage/user-storage.service';
+import { analyticsDetails } from '../models/analyticsmodal';
 @Injectable({
   providedIn: 'root',
 })
@@ -15,6 +16,12 @@ export class TranactionsService {
   };
 
   constructor(private userStorage: UserStorageService) {}
+
+  getIncome():number{
+    const userArray: userdetails[] = this.userStorage.getUser();
+    const index = this.getLoggedUserIndex();
+    return userArray[index].income;
+  }
 
   // to get the details of the logged user.
   getLoggedInUser(): userdetails {
@@ -41,6 +48,44 @@ export class TranactionsService {
   getExpenseTypes(transactionType: 'Income' | 'Expense'): string[] {
     return this.expenseOptions[transactionType] || [];
   }
+
+  getAnalyticsOption(type: 'Expense' | 'Food' | 'Transport' | 'Shopping' | 'Entertainment'): { data: number[], labels: string[], colors: string[] } {
+    const analyticsData: Record<'Expense' | 'Food' | 'Transport' | 'Shopping' | 'Entertainment', { data: number[], labels: string[], colors: string[] }> = {
+      Expense: {
+        data: [
+          (this.calculateAnalytics().foodCost / this.getIncome()) * 100,
+          (this.calculateAnalytics().transportCost / this.getIncome()) * 100,
+          (this.calculateAnalytics().shoppingCost / this.getIncome()) * 100,
+          (this.calculateAnalytics().entertainmentCost / this.getIncome()) * 100
+        ],
+        labels: ['Food', 'Transport', 'Shopping', 'Entertainment'],
+        colors: ["#b91d47", "#00aba9", "#2b5797", "#e8c3b9"]
+      },
+      Food: {
+        data: [(this.calculateAnalytics().foodCost / this.getIncome()) * 100],
+        labels: ['Food'],
+        colors: ["#b91d47"]
+      },
+      Transport: {
+        data: [(this.calculateAnalytics().transportCost / this.getIncome()) * 100],
+        labels: ['Transport'],
+        colors: ["#00aba9"]
+      },
+      Shopping: {
+        data: [(this.calculateAnalytics().shoppingCost / this.getIncome()) * 100],
+        labels: ['Shopping'],
+        colors: ["#2b5797"]
+      },
+      Entertainment: {
+        data: [(this.calculateAnalytics().entertainmentCost / this.getIncome()) * 100],
+        labels: ['Entertainment'],
+        colors: ["#e8c3b9"]
+      }
+    };
+  
+    return analyticsData[type];
+  }
+  
 
   // add a transaction
   addTransaction(form: NgForm) {
@@ -194,6 +239,7 @@ export class TranactionsService {
     // Analytics 
 
     calculateAnalytics(): {foodCost:number, entertainmentCost:number, shoppingCost:number, transportCost:number}{
+      this.calculateTransaction;
       const userArray: userdetails[] = this.userStorage.getUser();
       const index: number = this.getLoggedUserIndex();
       var food = 0;
@@ -216,5 +262,22 @@ export class TranactionsService {
       })
 
       return {foodCost:food,entertainmentCost:entertainment,shoppingCost:shopping,transportCost:transport};
+    }
+
+    editUserGoal(gindex:number, form:NgForm){
+      const userArray = this.userStorage.getUser();
+      const index = this.getLoggedUserIndex();
+      const {eGoalName,eGoalAmount} = form.value;
+      const oldGoal = userArray[index].goals[gindex];
+      const newGoal : goalDetails = {
+        gid: oldGoal.gid,
+        id: oldGoal.id,
+        name: eGoalName,
+        gamount:eGoalAmount,
+        camount:oldGoal.camount,
+      } 
+      userArray[index].goals[gindex] =  newGoal;
+      this.userStorage.setUser(userArray);
+      this.goalChanges=true;
     }
 }
