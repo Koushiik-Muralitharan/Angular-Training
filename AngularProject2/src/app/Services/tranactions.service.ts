@@ -129,6 +129,8 @@ export class TranactionsService {
     this.userStorage.setUser(userArray);
   }
 
+  // Goals Transaction services.
+
   getCurrentBalance():number{
     const userArray: userdetails[] = this.userStorage.getUser();
     const index: number = this.getLoggedUserIndex();
@@ -187,5 +189,32 @@ export class TranactionsService {
       userArray[index].goals.splice(gindex,1);
       this.userStorage.setUser(userArray);
       this.goalChanges=true;
+    }
+
+    // Analytics 
+
+    calculateAnalytics(): {foodCost:number, entertainmentCost:number, shoppingCost:number, transportCost:number}{
+      const userArray: userdetails[] = this.userStorage.getUser();
+      const index: number = this.getLoggedUserIndex();
+      var food = 0;
+      var entertainment=0;
+      var shopping=0;
+      var transport=0;
+      userArray[index].transactions.forEach((transaction)=>{
+        if(transaction.expenseMethod === 'Food'){
+          food+= transaction.amount;
+        }
+        if(transaction.expenseMethod === 'Entertainment'){
+          entertainment+= transaction.amount;
+        }
+        if(transaction.expenseMethod === 'Shopping'){
+          shopping+= transaction.amount;
+        }
+        if(transaction.expenseMethod === 'Transport'){
+         transport+= transaction.amount;
+        }
+      })
+
+      return {foodCost:food,entertainmentCost:entertainment,shoppingCost:shopping,transportCost:transport};
     }
 }

@@ -5,10 +5,11 @@ import { CommonModule } from '@angular/common';
 import { transactionDetails } from '../../../models/Transactionmodel';
 import { UserStorageService } from '../../../Storage/user-storage.service';
 import { userdetails } from '../../../models/Usermodel';
+import { AnalyticsComponent } from './analytics/analytics.component';
 @Component({
   selector: 'app-transaction',
   standalone: true,
-  imports: [FormsModule, CommonModule],
+  imports: [FormsModule, CommonModule, AnalyticsComponent],
   templateUrl: './transaction.component.html',
   styleUrl: './transaction.component.css'
 })
@@ -25,6 +26,7 @@ export class TransactionComponent  {
   selectedTransactionIndex: number | null = null;
   ButtonName:string = 'Submit';
   currentDate!: string;
+  transactionPopUp:Boolean = false;
 
   constructor(private transactionService: TranactionsService,private userStorage:UserStorageService) {
    
@@ -45,6 +47,10 @@ export class TransactionComponent  {
       this.updateTransactionSummary();
       this.transactionService.goalChanges = false;
     }
+  }
+
+  transactionModal():Boolean{
+    return this.transactionPopUp= !this.transactionPopUp;
   }
 
   updateTransactionSummary(): void {

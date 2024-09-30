@@ -1,5 +1,5 @@
 
-<button (click)="addGoal()">Add Goal</button>
+<button class="add-goal" (click)="addGoal()"><i class="fa-solid fa-sack-dollar"></i></button>
 
 <div *ngIf="addGoalPopUp" class="overlay">
   <div *ngIf="addGoalPopUp" [ngClass]="{'add-goal-pop-up': addGoalPopUp, }">
@@ -170,10 +170,18 @@
 
 <div>
   <div class="goal-card" *ngFor="let goal of goalsArray; let i = index" [ngClass]="{'goal-completion': goalStatusCheck(i)}">
-    <span>Goal name: {{ goal.name }}</span>
-    <span>Goal amount: {{ goal.gamount }}</span>
-    <span>Goal contribution: {{ goal.camount }}</span>
-    <div *ngIf="!goalStatusCheck(i)"><button (click)="addContribution(i)">+</button></div>
-    <div><button (click)="deleteGoal(i)">Delete</button></div>
+    <span class="goal-heading">{{ goal.name }}</span>
+    <!-- <span>Goal amount: {{ goal.gamount }}</span>
+    <span>Goal contribution: {{ goal.camount }}</span> -->
+    <progress [value]="((goal.camount/goal.gamount)*100)" max="100"></progress>
+    <div class="goal-footer">
+      <div>Progress: <span>{{(goal.camount / goal.gamount) * 100 | number:'1.0-2'}}%</span></div>
+    <div class="align-icons">
+    <div *ngIf="!goalStatusCheck(i)"><span (click)="addContribution(i)"><i class="fa-solid fa-plus"></i></span></div>
+    
+    <div  *ngIf="goalStatusCheck(i)"><span>Goal Amount: {{goal.camount}}</span></div>
+    <div><span (click)="deleteGoal(i)"><i class="fa-regular fa-trash-can"></i></span></div>
+    </div>
+    </div>
   </div>
 </div>

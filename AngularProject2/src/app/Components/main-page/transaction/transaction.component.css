@@ -1,3 +1,7 @@
+:host{
+    --secondary-color:  rgba(31, 28, 28, 0.2);
+}
+
 .form-elements{
     display: flex;
     flex-direction: column;
@@ -10,14 +14,21 @@
     align-items: center;
 }
 
+.glass-form {
+    background: var(--secondary-color); 
+    border-radius: 10px; 
+    padding: 20px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3); /* Subtle shadow */
+    backdrop-filter: blur(10px); /* Frosted glass blur effect */
+    border: 1px solid rgba(53, 53, 53, 0.3); /* Light border */
+  }
+
 form{
     display: flex;
     flex-direction: column;
     gap: 5px;
     margin: 2%;
-    padding: 10px;
-    border: 2px solid black;
-    border-radius: 5px;
+    margin-bottom: 0px;
 }
 
 button{
@@ -35,22 +46,77 @@ table{
     width: 100%;
     text-align: center;
     border-collapse:  separate;
-    border-spacing: 0px 20px;
+    border-spacing: 0px 10px;
     padding: 20px;
    
 }
-th{
-    background-color: blue;
+thead th{
+    background-color: var(--secondary-color);
 }
-tr{
-    background-color: red;
+tbody tr{
+    background-color: var(--secondary-color);
 }
+
 td,th{
-    padding: 5px;
+    padding: 2px;
 }
 
 .top-elements{
     display: flex;
     justify-content: space-around;
     margin-top: 10px;
+}
+
+tbody tr:hover{
+    transform: scale(1.02);
+}
+
+p{
+    background-color: var(--secondary-color);
+    padding: 3px 10px;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+}
+
+.add-transacation{
+    background-color: var(--secondary-color);
+    padding: 3px 10px;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+    cursor: pointer;
+}
+
+.overlay{
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);  
+    backdrop-filter: blur(5px);  
+    z-index: 1;  
+}
+
+.transactionsModal{
+    display: block;
+    position: fixed ;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 1px;
+    width: 500px;
+}
+
+.close-transaction{
+    text-align: right;
+}
+span.close-transaction:hover{
+    cursor: pointer;
+}
+
+.align-analytics{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
 }
