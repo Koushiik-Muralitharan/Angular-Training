@@ -17,7 +17,7 @@ export class TranactionsService {
 
   constructor(private userStorage: UserStorageService) {}
 
-  getIncome():number{
+  getIncome(): number {
     const userArray: userdetails[] = this.userStorage.getUser();
     const index = this.getLoggedUserIndex();
     return userArray[index].income;
@@ -49,43 +49,55 @@ export class TranactionsService {
     return this.expenseOptions[transactionType] || [];
   }
 
-  getAnalyticsOption(type: 'Expense' | 'Food' | 'Transport' | 'Shopping' | 'Entertainment'): { data: number[], labels: string[], colors: string[] } {
-    const analyticsData: Record<'Expense' | 'Food' | 'Transport' | 'Shopping' | 'Entertainment', { data: number[], labels: string[], colors: string[] }> = {
+  getAnalyticsOption(
+    type: 'Expense' | 'Food' | 'Transport' | 'Shopping' | 'Entertainment'
+  ): { data: number[]; labels: string[]; colors: string[] } {
+    const analyticsData: Record<
+      'Expense' | 'Food' | 'Transport' | 'Shopping' | 'Entertainment',
+      { data: number[]; labels: string[]; colors: string[] }
+    > = {
       Expense: {
         data: [
           (this.calculateAnalytics().foodCost / this.getIncome()) * 100,
           (this.calculateAnalytics().transportCost / this.getIncome()) * 100,
           (this.calculateAnalytics().shoppingCost / this.getIncome()) * 100,
-          (this.calculateAnalytics().entertainmentCost / this.getIncome()) * 100
+          (this.calculateAnalytics().entertainmentCost / this.getIncome()) *
+            100,
         ],
         labels: ['Food', 'Transport', 'Shopping', 'Entertainment'],
-        colors: ["#b91d47", "#00aba9", "#2b5797", "#e8c3b9"]
+        colors: ['#b91d47', '#00aba9', '#2b5797', '#e8c3b9'],
       },
       Food: {
         data: [(this.calculateAnalytics().foodCost / this.getIncome()) * 100],
         labels: ['Food'],
-        colors: ["#b91d47"]
+        colors: ['#b91d47'],
       },
       Transport: {
-        data: [(this.calculateAnalytics().transportCost / this.getIncome()) * 100],
+        data: [
+          (this.calculateAnalytics().transportCost / this.getIncome()) * 100,
+        ],
         labels: ['Transport'],
-        colors: ["#00aba9"]
+        colors: ['#00aba9'],
       },
       Shopping: {
-        data: [(this.calculateAnalytics().shoppingCost / this.getIncome()) * 100],
+        data: [
+          (this.calculateAnalytics().shoppingCost / this.getIncome()) * 100,
+        ],
         labels: ['Shopping'],
-        colors: ["#2b5797"]
+        colors: ['#2b5797'],
       },
       Entertainment: {
-        data: [(this.calculateAnalytics().entertainmentCost / this.getIncome()) * 100],
+        data: [
+          (this.calculateAnalytics().entertainmentCost / this.getIncome()) *
+            100,
+        ],
         labels: ['Entertainment'],
-        colors: ["#e8c3b9"]
-      }
+        colors: ['#e8c3b9'],
+      },
     };
-  
+
     return analyticsData[type];
   }
-  
 
   // add a transaction
   addTransaction(form: NgForm) {
@@ -133,7 +145,9 @@ export class TranactionsService {
           userArray[index].expense += tranaction.amount;
         }
       });
-      userArray[index].balance = userArray[index].income - (userArray[index].expense + this.totalSavings());
+      userArray[index].balance =
+        userArray[index].income -
+        (userArray[index].expense + this.totalSavings());
       this.userStorage.setUser(userArray);
       //this.getCurrentBalance();
     } else {
@@ -166,118 +180,134 @@ export class TranactionsService {
     form.resetForm();
   }
 
-  deleteTransaction(tindex:number){
+  deleteTransaction(tindex: number) {
     const userArray: userdetails[] = this.userStorage.getUser();
     const index = this.getLoggedUserIndex();
-    userArray[index].transactions.splice(tindex,1);
+    userArray[index].transactions.splice(tindex, 1);
 
     this.userStorage.setUser(userArray);
   }
 
   // Goals Transaction services.
 
-  getCurrentBalance():number{
+  getCurrentBalance(): number {
     const userArray: userdetails[] = this.userStorage.getUser();
     const index: number = this.getLoggedUserIndex();
     return userArray[index].balance;
-   }
+  }
 
-   addGoals(form:NgForm):void{
+  addGoals(form: NgForm): void {
     const userArray: userdetails[] = this.userStorage.getUser();
     const index: number = this.getLoggedUserIndex();
-    const {goalname,goalamount,initalcontribution} = form.value;
+    const { goalname, goalamount, initalcontribution } = form.value;
 
     const newGoal: goalDetails = {
       gid: Date.now() + '',
       id: userArray[index].id,
       name: goalname,
       gamount: parseInt(goalamount),
-      camount: parseInt(initalcontribution) || 0
-    }
+      camount: parseInt(initalcontribution) || 0,
+    };
 
     userArray[index].goals.push(newGoal);
     this.userStorage.setUser(userArray);
     this.goalChanges = true;
+  }
+
+  getGoalInfo(gindex: number): goalDetails {
+    const userArray = this.userStorage.getUser();
+    const index = this.getLoggedUserIndex();
+    return userArray[index].goals[gindex];
+  }
+
+  totalSavings(): number {
+    const userArray: userdetails[] = this.userStorage.getUser();
+    const index: number = this.getLoggedUserIndex();
+    var savings = 0;
+    userArray[index].goals.forEach((goal) => {
+      savings += goal.camount;
+    });
+    //console.log("Savings:"+savings);
+    return savings;
+  }
+
+  UpdateContribution(form: NgForm, gindex: number) {
+    const userArray: userdetails[] = this.userStorage.getUser();
+    const index: number = this.getLoggedUserIndex();
+    const { ContributionAmount } = form.value;
+    userArray[index].goals[gindex].camount += Number(ContributionAmount);
+    this.userStorage.setUser(userArray);
+    this.goalChanges = true;
+  }
+
+  deleteGoal(gindex: number) {
+    const userArray: userdetails[] = this.userStorage.getUser();
+    const index: number = this.getLoggedUserIndex();
+    userArray[index].goals.splice(gindex, 1);
+    this.userStorage.setUser(userArray);
+    this.goalChanges = true;
+  }
+
+  // Analytics
+
+  calculateAnalytics(): {
+    foodCost: number;
+    entertainmentCost: number;
+    shoppingCost: number;
+    transportCost: number;
+  } {
+    this.calculateTransaction;
+    const userArray: userdetails[] = this.userStorage.getUser();
+    const index: number = this.getLoggedUserIndex();
+    var food = 0;
+    var entertainment = 0;
+    var shopping = 0;
+    var transport = 0;
+    userArray[index].transactions.forEach((transaction) => {
+      if (transaction.expenseMethod === 'Food') {
+        food += transaction.amount;
+      }
+      if (transaction.expenseMethod === 'Entertainment') {
+        entertainment += transaction.amount;
+      }
+      if (transaction.expenseMethod === 'Shopping') {
+        shopping += transaction.amount;
+      }
+      if (transaction.expenseMethod === 'Transport') {
+        transport += transaction.amount;
+      }
+    });
+
+    return {
+      foodCost: food,
+      entertainmentCost: entertainment,
+      shoppingCost: shopping,
+      transportCost: transport,
+    };
+  }
+
+  editUserGoal(gindex: number, form: NgForm) {
+    const userArray = this.userStorage.getUser();
+    const index = this.getLoggedUserIndex();
+    const { eGoalName, eGoalAmount } = form.value;
+    const oldGoal = userArray[index].goals[gindex];
+    const newGoal: goalDetails = {
+      gid: oldGoal.gid,
+      id: oldGoal.id,
+      name: eGoalName,
+      gamount: eGoalAmount,
+      camount: oldGoal.camount,
+    };
+
+    if (oldGoal.gamount > newGoal.gamount) {
+      if (newGoal.camount > newGoal.gamount) {
+        const excessContribution = newGoal.camount - newGoal.gamount;
+        userArray[index].balance += excessContribution;
+        newGoal.camount = newGoal.gamount;
+      }
     }
-
-    getGoalInfo(gindex: number):goalDetails{
-       const userArray = this.userStorage.getUser();
-       const index = this.getLoggedUserIndex();
-       return userArray[index].goals[gindex];
-
-    }
-
-    totalSavings(): number{
-      const userArray: userdetails[] = this.userStorage.getUser();
-      const index: number = this.getLoggedUserIndex();
-      var savings = 0;
-      userArray[index].goals.forEach((goal)=>{
-        savings+= goal.camount;
-      })
-      //console.log("Savings:"+savings);
-      return savings;
-    }
-
-    UpdateContribution(form:NgForm, gindex:number){
-      const userArray: userdetails[] = this.userStorage.getUser();
-      const index: number = this.getLoggedUserIndex();
-      const {ContributionAmount} = form.value;
-      userArray[index].goals[gindex].camount+= Number(ContributionAmount);
-      this.userStorage.setUser(userArray);
-      this.goalChanges=true;
-      
-    }
-
-    deleteGoal(gindex:number){
-      const userArray: userdetails[] = this.userStorage.getUser();
-      const index: number = this.getLoggedUserIndex();
-      userArray[index].goals.splice(gindex,1);
-      this.userStorage.setUser(userArray);
-      this.goalChanges=true;
-    }
-
-    // Analytics 
-
-    calculateAnalytics(): {foodCost:number, entertainmentCost:number, shoppingCost:number, transportCost:number}{
-      this.calculateTransaction;
-      const userArray: userdetails[] = this.userStorage.getUser();
-      const index: number = this.getLoggedUserIndex();
-      var food = 0;
-      var entertainment=0;
-      var shopping=0;
-      var transport=0;
-      userArray[index].transactions.forEach((transaction)=>{
-        if(transaction.expenseMethod === 'Food'){
-          food+= transaction.amount;
-        }
-        if(transaction.expenseMethod === 'Entertainment'){
-          entertainment+= transaction.amount;
-        }
-        if(transaction.expenseMethod === 'Shopping'){
-          shopping+= transaction.amount;
-        }
-        if(transaction.expenseMethod === 'Transport'){
-         transport+= transaction.amount;
-        }
-      })
-
-      return {foodCost:food,entertainmentCost:entertainment,shoppingCost:shopping,transportCost:transport};
-    }
-
-    editUserGoal(gindex:number, form:NgForm){
-      const userArray = this.userStorage.getUser();
-      const index = this.getLoggedUserIndex();
-      const {eGoalName,eGoalAmount} = form.value;
-      const oldGoal = userArray[index].goals[gindex];
-      const newGoal : goalDetails = {
-        gid: oldGoal.gid,
-        id: oldGoal.id,
-        name: eGoalName,
-        gamount:eGoalAmount,
-        camount:oldGoal.camount,
-      } 
-      userArray[index].goals[gindex] =  newGoal;
-      this.userStorage.setUser(userArray);
-      this.goalChanges=true;
-    }
+    userArray[index].goals[gindex] = newGoal;
+    this.userStorage.setUser(userArray);
+    this.goalChanges = true;
+  }
 }

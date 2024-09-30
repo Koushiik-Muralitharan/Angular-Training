@@ -157,9 +157,4 @@ export class GoalComponent {
     this.editGoalName = userArray[index].goals[gindex].name;
     this.editGoalAmount = userArray[index].goals[gindex].gamount;
   }
-
-
-
-
-   
 }
