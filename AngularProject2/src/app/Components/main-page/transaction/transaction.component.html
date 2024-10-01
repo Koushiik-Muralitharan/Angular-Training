@@ -19,9 +19,9 @@
     <div class="button-container">
       <button (click)="onChartChange('Food')">Food</button>
       <button (click)="onChartChange('Transport')">transport</button>
-      <button (click)="onChartChange('Entertainment')">Entertainment</button>
       <button (click)="onChartChange('Shopping')">Shopping</button>
       <button (click)="onChartChange('Expense')">Show All</button>
+      <button (click)="onChartChange('Entertainment')">Entertainment</button>
     </div>
     <app-analytics [refreshData]="refreshFlag" [labelArray]="chartLabels" [chartLabels]="chartDataLabels" [chartColors]="chartColors"></app-analytics>
   </div>
@@ -143,26 +143,28 @@
 
   <div>
     <h2>Transaction History</h2>
-    <table>
-      <thead>
-        <tr>
-          <th>Transaction</th>
-          <th>Type</th>
-          <th>Amount</th>
-          <th>Date</th>
-          <th colspan="2">Actions</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr *ngFor="let transaction of transactions; let i = index">
-          <td>{{ transaction.transactionMethod }}</td>
-          <td>{{ transaction.expenseMethod }}</td>
-          <td>{{ transaction.amount }}</td>
-          <td>{{ transaction.date | date : "shortDate" }}</td>
-          <td><button (click)="edit(i)"><i class="fa-regular fa-pen-to-square"></i></button></td>
-          <td><button (click)="delete(i)"><i class="fa-regular fa-trash-can"></i></button></td>
-        </tr>
-      </tbody>
-    </table>
+    <div class="table-container">
+      <table>
+        <thead>
+          <tr>
+            <th>Transaction</th>
+            <th>Type</th>
+            <th>Amount</th>
+            <th>Date</th>
+            <th colspan="2">Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let transaction of transactions; let i = index">
+            <td>{{ transaction.transactionMethod }}</td>
+            <td>{{ transaction.expenseMethod }}</td>
+            <td>{{ transaction.amount }}</td>
+            <td>{{ transaction.date | date : "shortDate" }}</td>
+            <td><button (click)="edit(i)"><i class="fa-regular fa-pen-to-square"></i></button></td>
+            <td><button (click)="delete(i)"><i class="fa-regular fa-trash-can"></i></button></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
   </div>
 </main>

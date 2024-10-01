@@ -29,3 +29,12 @@ div section{
 .main-section{
     grid-area: m;
 }
+
+@media screen and (max-width:811px){
+    .content-container{
+        grid-template-areas: 
+        "h h h"
+        "m m m"
+        "s s s";
+    }
+}

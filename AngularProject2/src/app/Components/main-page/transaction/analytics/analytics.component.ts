@@ -25,16 +25,15 @@ export class AnalyticsComponent {
   }
 
   ngOnChanges(changes: SimpleChanges) {
-    if (changes['refreshData'] && !changes['refreshData'].firstChange) {
       console.log(changes);
-      this.updateChart();
-    }
+    this.updateChart();
+
   }
   
   renderChart(){
     const userArray = this.userStorage.getUser();
     const index = this.transactionService.getLoggedUserIndex();
-    const income = userArray[index].income;
+    const expense = userArray[index].expense;
     const canvas = document.getElementById("myChart") as HTMLCanvasElement;
     Chart.register(PieController, ArcElement, Title, Legend, Tooltip);
     console.log("Hi "+ this.labelArray);
@@ -46,10 +45,10 @@ export class AnalyticsComponent {
           datasets: [
             {
               backgroundColor: ["#b91d47", "#00aba9", "#2b5797", "#e8c3b9"],
-              data: [(this.transactionService.calculateAnalytics().foodCost/income)*100,
-                (this.transactionService.calculateAnalytics().transportCost/income)*100 ,
-                (this.transactionService.calculateAnalytics().shoppingCost/income)*100 ,
-                (this.transactionService.calculateAnalytics().entertainmentCost/income)*100 ],
+              data: [(this.transactionService.calculateAnalytics().foodCost/expense)*100,
+                (this.transactionService.calculateAnalytics().transportCost/expense)*100 ,
+                (this.transactionService.calculateAnalytics().shoppingCost/expense)*100 ,
+                (this.transactionService.calculateAnalytics().entertainmentCost/expense)*100 ],
             },
           ],
         };
@@ -81,6 +80,7 @@ export class AnalyticsComponent {
       this.chart.data.datasets[0].backgroundColor = this.chartColors;
       this.chart.data.labels = this.chartLabels;
       this.chart.update();
+      //this.updateChart();
     }
   }
 }

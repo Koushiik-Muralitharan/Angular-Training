@@ -22,6 +22,11 @@ export class TranactionsService {
     const index = this.getLoggedUserIndex();
     return userArray[index].income;
   }
+  getExpense(): number {
+    const userArray: userdetails[] = this.userStorage.getUser();
+    const index = this.getLoggedUserIndex();
+    return userArray[index].expense;
+  }
 
   // to get the details of the logged user.
   getLoggedInUser(): userdetails {
@@ -58,37 +63,37 @@ export class TranactionsService {
     > = {
       Expense: {
         data: [
-          (this.calculateAnalytics().foodCost / this.getIncome()) * 100,
-          (this.calculateAnalytics().transportCost / this.getIncome()) * 100,
-          (this.calculateAnalytics().shoppingCost / this.getIncome()) * 100,
-          (this.calculateAnalytics().entertainmentCost / this.getIncome()) *
+          (this.calculateAnalytics().foodCost / this.getExpense()) * 100,
+          (this.calculateAnalytics().transportCost / this.getExpense()) * 100,
+          (this.calculateAnalytics().shoppingCost / this.getExpense()) * 100,
+          (this.calculateAnalytics().entertainmentCost / this.getExpense()) *
             100,
         ],
         labels: ['Food', 'Transport', 'Shopping', 'Entertainment'],
         colors: ['#b91d47', '#00aba9', '#2b5797', '#e8c3b9'],
       },
       Food: {
-        data: [(this.calculateAnalytics().foodCost / this.getIncome()) * 100],
+        data: [(this.calculateAnalytics().foodCost / this.getExpense()) * 100],
         labels: ['Food'],
         colors: ['#b91d47'],
       },
       Transport: {
         data: [
-          (this.calculateAnalytics().transportCost / this.getIncome()) * 100,
+          (this.calculateAnalytics().transportCost / this.getExpense()) * 100,
         ],
         labels: ['Transport'],
         colors: ['#00aba9'],
       },
       Shopping: {
         data: [
-          (this.calculateAnalytics().shoppingCost / this.getIncome()) * 100,
+          (this.calculateAnalytics().shoppingCost / this.getExpense()) * 100,
         ],
         labels: ['Shopping'],
         colors: ['#2b5797'],
       },
       Entertainment: {
         data: [
-          (this.calculateAnalytics().entertainmentCost / this.getIncome()) *
+          (this.calculateAnalytics().entertainmentCost / this.getExpense()) *
             100,
         ],
         labels: ['Entertainment'],
@@ -184,7 +189,7 @@ export class TranactionsService {
     const userArray: userdetails[] = this.userStorage.getUser();
     const index = this.getLoggedUserIndex();
     userArray[index].transactions.splice(tindex, 1);
-
+    //this.getAnalyticsOption('Expense');
     this.userStorage.setUser(userArray);
   }
 

@@ -6,6 +6,13 @@
 h2{
   text-align: center;
 }
+.savings-header{
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 15px;
+}
+.savings-header
 
 .add-goal-pop-up{
     display: block;
@@ -14,31 +21,35 @@ h2{
     left: 50%;
     transform: translate(-50%, -50%);
     z-index: 1px;
-    background-color: aquamarine;
-    border: 1px solid black;
     padding: 20px;
 }
 
 .congrats-pop-up{
-  position: fixed ;
+   position: fixed ;
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
     z-index: 1px;
-    background-color: aquamarine;
-    border: 1px solid black;
     padding: 20px;
+    background-color: grey;
+    border-radius: 10px;
 }
-
+.congrats-align{
+  display: flex;
+  gap: 20px;
+  
+}
 .update-pop-up{
   position: fixed ;
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
     z-index: 1px;
-    background-color: aquamarine;
-    border: 1px solid black;
     padding: 20px;
+    border-radius: 10px; 
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+    border: 1px solid rgba(53, 53, 53, 0.3);
+    background-color: grey;
 }
 
 .overlay {
@@ -51,12 +62,12 @@ h2{
     backdrop-filter: blur(5px);  
     z-index: 1;  
   }
-  .close-button{
+  /* .close-button{
     border: none;
     background-color: aquamarine;
     padding: 0px;
     margin: 5px;
-  }
+  } */
   .align-close{
     display: flex;
     justify-content: flex-end;
@@ -68,6 +79,16 @@ h2{
     gap: 5px;
   }
 
+  .glass-form {
+    background: var(--secondary-color); 
+    border-radius: 10px; 
+    padding: 20px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3); /* Subtle shadow */
+    /* backdrop-filter: blur(5px);  */
+    background-color: grey;
+    border: 1px solid rgba(53, 53, 53, 0.3); /* Light border */
+  }
+  
   form{
     display: flex;
     flex-direction: column ;
@@ -106,6 +127,8 @@ h2{
     padding: 5px 0px;
     text-align: center;
   }
+
+  
 
   .align-icons{
     display: flex;

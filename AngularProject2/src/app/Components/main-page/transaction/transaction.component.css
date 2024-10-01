@@ -18,9 +18,9 @@
     background: var(--secondary-color); 
     border-radius: 10px; 
     padding: 20px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3); /* Subtle shadow */
-    backdrop-filter: blur(10px); /* Frosted glass blur effect */
-    border: 1px solid rgba(53, 53, 53, 0.3); /* Light border */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3); 
+    backdrop-filter: blur(10px); 
+    border: 1px solid rgba(53, 53, 53, 0.3); 
   }
 
 form{
@@ -42,6 +42,11 @@ small{
     color: red;
 }
 
+.table-container{
+    overflow-x: auto;
+}
+
+
 table{
     width: 100%;
     text-align: center;
@@ -50,6 +55,7 @@ table{
     padding: 20px;
    
 }
+
 thead th{
     background-color: var(--secondary-color);
 }
@@ -149,4 +155,27 @@ span.close-transaction:hover{
   }
   h2{
     text-align: center;
+  }
+
+  @media screen and (max-width:496px){
+     .transactionsModal{
+        width: auto;
+     }
+  }
+
+  @media screen and (max-width:469px) {
+    .align-analytics{
+        flex-direction: column;
+    }
+    .button-container{
+        flex-direction: row;
+        flex-wrap: wrap;
+    }
+    .top-elements{
+        display: flex;
+        flex-wrap:  wrap;
+        gap: 10px;
+    }
+
+    
   }

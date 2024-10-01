@@ -1,16 +1,20 @@
 <h2>Savings</h2>
-<button class="add-goal" (click)="addGoal()">
-  <i class="fa-solid fa-sack-dollar"></i>
-</button>
+<div class="savings-header">
+  <button class="add-goal" (click)="addGoal()">
+    <i class="fa-solid fa-sack-dollar"></i>
+  </button>
+  
+  <span>Savings:{{goalsSavings}}</span>
+</div>
 <!-- add goal pop up -->
 <div *ngIf="addGoalPopUp" class="overlay">
-  <div *ngIf="addGoalPopUp" [ngClass]="{'add-goal-pop-up': addGoalPopUp, }">
+  <div class="glass-form" *ngIf="addGoalPopUp" [ngClass]="{'add-goal-pop-up': addGoalPopUp, }">
     <p class="align-close">
-      <button class="close-button" (click)="addGoal()">X</button>
+      <span class="close-button" (click)="addGoal()">X</span>
     </p>
     <div>
       <p>
-        Remaining Balance: <span>{{ currentBalance }}</span>
+         Balance: <span>{{ currentBalance }}$</span>
       </p>
     </div>
     <form #goaldata="ngForm" (submit)="onGoalSubmit(goaldata)">
@@ -40,12 +44,13 @@
       <div class="form-elements">
         <label for="gamount">Target Amount</label>
         <input
-          type="text"
+          type="number"
           name="goalamount"
           id="gamount"
           placeholder=" Goal Amount"
           ngModel
           required
+          min="0"
           pattern="^[0-9]+$"
           #gfamount="ngModel"
         />
@@ -109,44 +114,48 @@
 <!-- congrats pop up -->
 <div *ngIf="gCongrats" class="overlay">
   <div class="congrats-pop-up">
-    <button (click)="closeCongrats()">X</button>
-    <span>Completed the goal successfully !</span>
+    
+    <div class="congrats-align">
+      <span>Completed the goal successfully !</span>
+      <span (click)="closeCongrats()">X</span>
+    </div>
   </div>
 </div>
 
 <!-- contribution pop up -->
 <div *ngIf="contributeGoalPopUp" class="overlay">
-  <div
+  <div class="glass-form"
     *ngIf="contributeGoalPopUp"
     [ngClass]="{ 'add-goal-pop-up': contributeGoalPopUp }"
   >
     <p class="align-close">
-      <button class="close-button" (click)="closeContribution()">X</button>
+      <span class="close-button" (click)="closeContribution()">X</span>
     </p>
     <div>
       <p>
-        Remaining Balance: <span>{{ currentBalance }}</span>
+        Balance: <span>{{ currentBalance }}$</span>
       </p>
       <p>
-        goal Amount: <span>{{ goaltarget }}</span>
+        goal Amount: <span>{{ goaltarget }}$</span>
       </p>
       <p>
-        Contributed: <span>{{ goalContributed }}</span>
+        Contributed: <span>{{ goalContributed }}$</span>
       </p>
     </div>
     <form
       #contributiondata="ngForm"
       (submit)="onContributionSubmit(contributiondata)"
     >
-      <div>
+      <div class="form-elements">
         <label for="contributeamount">Contribution Amount</label>
         <input
-          type="text"
+          type="number"
           id="contributeamount"
           name="ContributionAmount"
           #gcfamount="ngModel"
           ngModel
           required
+          min="0"
           pattern="^(0|[1-9][0-9]*)$"
         />
 
@@ -154,7 +163,7 @@
           <small *ngIf="gcfamount.errors?.['required']"
             >*amount is a required field</small
           >
-          <small *ngIf="gcfamount.errors?.['pattern']"
+          <small *ngIf="gcfamount.errors?.['min']"
             >*Enter a valid amount</small
           >
         </div>
@@ -185,20 +194,45 @@
 
 <!-- update goal -->
 <div *ngIf="updateGoalPopUp" class="overlay">
-  <div class="update-pop-up">
-    <span (click)="updateGoal()">X</span>
-    <form #editGoalForm="ngForm" (submit)="goalUpdate(editGoalForm)">
-      <p>
-        <label for="editGoalName">goal Name</label>
-        <input type="text" name="eGoalName" id="editGoalName" required pattern="^[^\d]*$" [(ngModel)]="editGoalName" />
+  <div class="update-pop-up" >
+    <div class="align-close"><span (click)="updateGoal()">X</span></div>
+    <form  #editGoalForm="ngForm" (submit)="goalUpdate(editGoalForm)">
+      <p class="form-elements">
+        <label for="editGoalName">Edit Goal Name</label>
+        <input
+          type="text"
+          name="eGoalName"
+          id="editGoalName"
+          required
+          pattern="^[^\d]*$"
+          [(ngModel)]="editGoalName"
+          #goalNameInput="ngModel"
+        />
+        <span *ngIf="goalNameInput.invalid && goalNameInput.touched" class="error-msg">
+          <span *ngIf="goalNameInput.errors?.['required']">Goal name is required.</span>
+          <span *ngIf="goalNameInput.errors?.['pattern']">Goal name cannot contain numbers.</span>
+        </span>
+        <span *ngIf="checkGoalNameUpdate(goalNameInput.value) && goalNameInput.dirty">Name already exists</span>
       </p>
 
-      <p>
+      <p class="form-elements">
         <label for="editGoalAmount">Goal Amount</label>
-        <input type="number" min="0" name="eGoalAmount" id="editGoalAmount" required [(ngModel)]="editGoalAmount" />
+        <input
+          type="number"
+          min="0"
+          name="eGoalAmount"
+          id="editGoalAmount"
+          required
+          [(ngModel)]="editGoalAmount"
+          #goalAmountInput="ngModel"
+        />
+        <span *ngIf="goalAmountInput.invalid && goalAmountInput.touched" class="error-msg">
+          <span *ngIf="goalAmountInput.errors?.['required']">Goal amount is required.</span>
+          <span *ngIf="goalAmountInput.errors?.['min']">Goal amount cannot be negative.</span>
+        </span>
       </p>
 
-      <button [disabled]="!editGoalForm.valid">Update</button>
+      <div><button [disabled]="!editGoalForm.valid || checkGoalNameUpdate(goalNameInput.value)">Update</button></div>
     </form>
   </div>
 </div>
