@@ -143,6 +143,10 @@
 
   <div>
     <h2>Transaction History</h2>
+    <div>
+      <button (click)="exportToCSV()">Export</button>
+      <label for="import">Import<input type="file" accept=".csv" (change)="importFromCSV($event)" id="import"></label>
+    </div>
     <div class="table-container">
       <table>
         <thead>
