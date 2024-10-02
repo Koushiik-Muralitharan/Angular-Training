@@ -8,25 +8,24 @@ import { Router } from '@angular/router';
   standalone: true,
   imports: [],
   templateUrl: './navbar.component.html',
-  styleUrl: './navbar.component.css'
+  styleUrl: './navbar.component.css',
 })
 export class NavbarComponent {
-  userName!:string;
-  constructor(private userStorage: UserStorageService, private transactionService: TranactionsService, private route:Router){
-    
-  }
+  userName!: string;
+  constructor(
+    private userStorage: UserStorageService,
+    private transactionService: TranactionsService,
+    private route: Router
+  ) {}
 
-  ngOnInit():void{
+  ngOnInit(): void {
     const userArray: userdetails[] = this.userStorage.getUser();
     const index = this.transactionService.getLoggedUserIndex();
     this.userName = userArray[index].name;
   }
 
   logout() {
-    // Clear session storage
     sessionStorage.clear();
-
-    // Redirect to the sign-up page
     this.route.navigate(['/']);
   }
 }

@@ -4,7 +4,7 @@ import { transactionDetails } from '../models/Transactionmodel';
 import { userdetails } from '../models/Usermodel';
 import { goalDetails } from '../models/goalsmodal';
 import { UserStorageService } from '../Storage/user-storage.service';
-import { analyticsDetails } from '../models/analyticsmodal';
+
 @Injectable({
   providedIn: 'root',
 })
@@ -48,12 +48,13 @@ export class TranactionsService {
     return userArray[index].transactions;
   }
 
-  // change the expense categories based on the transaction
+  // change the expense categories based on the transaction.
 
   getExpenseTypes(transactionType: 'Income' | 'Expense'): string[] {
     return this.expenseOptions[transactionType] || [];
   }
 
+  // filter the statistics.
   getAnalyticsOption(
     type: 'Expense' | 'Food' | 'Transport' | 'Shopping' | 'Entertainment'
   ): { data: number[]; labels: string[]; colors: string[] } {
@@ -108,7 +109,6 @@ export class TranactionsService {
   addTransaction(form: NgForm) {
     const userInfo = this.getLoggedInUser();
     const userArray = this.userStorage.getUser();
-    //console.log(userInfo);
     const {
       transactionstype,
       expensetype,
@@ -134,6 +134,7 @@ export class TranactionsService {
     form.resetForm();
   }
 
+  // load the income, expense, and balance.
   calculateTransaction(): void {
     const tranactions = this.loggedUserTransaction();
     const userArray: userdetails[] = this.userStorage.getUser();
@@ -154,12 +155,12 @@ export class TranactionsService {
         userArray[index].income -
         (userArray[index].expense + this.totalSavings());
       this.userStorage.setUser(userArray);
-      //this.getCurrentBalance();
     } else {
       console.log('no such user exists...');
     }
   }
 
+  // edit transaction.
   editTransaction(tindex: number, form: NgForm) {
     const userArray: userdetails[] = this.userStorage.getUser();
     const index = this.getLoggedUserIndex();
@@ -181,15 +182,14 @@ export class TranactionsService {
     };
     userArray[index].transactions[tindex] = newTransaction;
     this.userStorage.setUser(userArray);
-    //console.log(oldTransaction);
     form.resetForm();
   }
 
+  // delete transaction.
   deleteTransaction(tindex: number) {
     const userArray: userdetails[] = this.userStorage.getUser();
     const index = this.getLoggedUserIndex();
     userArray[index].transactions.splice(tindex, 1);
-    //this.getAnalyticsOption('Expense');
     this.userStorage.setUser(userArray);
   }
 
@@ -232,7 +232,6 @@ export class TranactionsService {
     userArray[index].goals.forEach((goal) => {
       savings += goal.camount;
     });
-    //console.log("Savings:"+savings);
     return savings;
   }
 

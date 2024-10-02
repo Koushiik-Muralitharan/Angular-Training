@@ -84,8 +84,8 @@
         [ngModelOptions]="{ updateOn: 'change' }"
         #fcpass="ngModel"
       />
-      <small *ngIf="fcpass.invalid && fcpass.dirty">
-        <span *ngIf="fcpass.errors?.['required']">*Confirm password is required field</span>
+      <small *ngIf="fcpass.invalid && fcpass.touched">
+        <span *ngIf="fcpass.errors?.['required'] && fcpass.touched ">*Confirm password is required field</span>
         <span *ngIf="fcpass.errors?.['passwordMismatch'] && fcpass.dirty"> Passwords do not match</span>
       </small>
     </p>

@@ -8,8 +8,6 @@ import { TransactionComponent } from './transaction/transaction.component';
   standalone: true,
   imports: [GoalComponent, NavbarComponent, TransactionComponent],
   templateUrl: './main-page.component.html',
-  styleUrl: './main-page.component.css'
+  styleUrl: './main-page.component.css',
 })
-export class MainPageComponent {
-
-}
+export class MainPageComponent {}

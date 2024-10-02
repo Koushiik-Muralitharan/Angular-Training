@@ -6,7 +6,7 @@ import { transactionDetails } from '../../../models/Transactionmodel';
 import { UserStorageService } from '../../../Storage/user-storage.service';
 import { userdetails } from '../../../models/Usermodel';
 import { AnalyticsComponent } from './analytics/analytics.component';
-import { analyticsDetails } from '../../../models/analyticsmodal';
+
 @Component({
   selector: 'app-transaction',
   standalone: true,
@@ -114,8 +114,6 @@ export class TransactionComponent {
   }
 
   delete(index: number) {
-    //console.log(index+"going to delete...");
-
     this.transactionService.deleteTransaction(index);
     this.loadTransactions();
     this.onChartChange('Expense');
@@ -125,7 +123,6 @@ export class TransactionComponent {
   }
 
   onTransactionSubmit(form: NgForm) {
-    //console.log(form);
     if (this.selectedTransactionIndex !== null) {
       console.log('I am going to edit...');
       this.transactionService.editTransaction(
@@ -154,58 +151,69 @@ export class TransactionComponent {
     this.transactionService.calculateAnalytics();
   }
 
-
-   exportToCSV() {
-    // Retrieve transaction data from local storage
+  exportToCSV() {
     const index = this.transactionService.getLoggedUserIndex();
     const userArray: userdetails[] = this.userStorage.getUser();
     const transactions = userArray[index].transactions;
     if (!transactions || transactions.length === 0) {
-        alert("No transaction data found to export.");
-        return;
+      alert('No transaction data found to export.');
+      return;
     }
-  
-    // Convert the data to CSV format
-    let csvContent = "data:text/csv;charset=utf-8," 
-                    + "Transaction ID,User ID, Email ,Date, Amount, Category, Transaction Type \n"; 
-  
-    transactions.forEach(transaction => {
-        let row = `${transaction.tid},${transaction.id},${transaction.email},${transaction.date},${transaction.amount},${transaction.expenseMethod},${transaction.transactionMethod}`;
-        csvContent += row + "\n"; 
+    let csvContent =
+      'data:text/csv;charset=utf-8,' +
+      'Transaction ID,User ID, Email ,Date, Amount, Category, Transaction Type \n';
+
+    transactions.forEach((transaction) => {
+      let row = `${transaction.tid},${transaction.id},${transaction.email},${transaction.date},${transaction.amount},${transaction.expenseMethod},${transaction.transactionMethod}`;
+      csvContent += row + '\n';
     });
-  
-    // Create a link element to download the CSV
     const encodedUri = encodeURI(csvContent);
-    const link = document.createElement("a");
-    link.setAttribute("href", encodedUri);
-    link.setAttribute("download", "transactions.csv");
+    const link = document.createElement('a');
+    link.setAttribute('href', encodedUri);
+    link.setAttribute('download', 'transactions.csv');
     document.body.appendChild(link);
-  
+
     link.click();
     document.body.removeChild(link);
   }
 
-   importFromCSV(event :Event) {
+  importFromCSV(event: Event) {
     const input = event.target as HTMLInputElement;
     const file = input.files ? input.files[0] : null;
     const index = this.transactionService.getLoggedUserIndex();
     const userArray: userdetails[] = this.userStorage.getUser();
-  
+
     if (!file) {
-        alert("Please select a CSV file to import.");
-        return;
+      alert('Please select a CSV file to import.');
+      return;
     }
-  
+
     const reader = new FileReader();
     reader.onload = (e: ProgressEvent<FileReader>) => {
       const content = e.target?.result as string;
-      const rows = content.split("\n").slice(1);
-  
+      const rows = content.split('\n').slice(1);
+
       let newTransactions: transactionDetails[] = [];
-      rows.forEach(row => {
-        const [transactionid, userid, email, date, amount, category, transactionType] = row.split(",");
-  
-        if (transactionid && date && amount && category && email && transactionType && userid) {
+      rows.forEach((row) => {
+        const [
+          transactionid,
+          userid,
+          email,
+          date,
+          amount,
+          category,
+          transactionType,
+        ] = row.split(',');
+
+        if (
+          transactionid &&
+          date &&
+          amount &&
+          category &&
+          email &&
+          transactionType &&
+          userid
+        ) {
           const transaction: transactionDetails = {
             tid: transactionid,
             id: userid,
@@ -213,34 +221,31 @@ export class TransactionComponent {
             transactionMethod: transactionType,
             expenseMethod: category,
             amount: parseFloat(amount),
-            date: date
+            date: date,
           };
           newTransactions.push(transaction);
         }
       });
-  
+
       if (newTransactions.length > 0) {
         const existingTransactions = userArray[index].transactions;
-        const updatedTransactions = [...existingTransactions, ...newTransactions];
+        const updatedTransactions = [
+          ...existingTransactions,
+          ...newTransactions,
+        ];
         userArray[index].transactions = updatedTransactions;
         this.userStorage.setUser(userArray);
-        alert("Transactions successfully imported!");
-        this.loadTransactions();  
+        alert('Transactions successfully imported!');
+        this.loadTransactions();
         this.transactionService.calculateTransaction();
         this.updateTransactionSummary();
-        this.onChartChange("Expense");
+        this.onChartChange('Expense');
         this.refreshContent();
       } else {
-        alert("No valid transactions found in the file.");
+        alert('No valid transactions found in the file.');
       }
     };
-     
-    // this.loadTransactions();
-    // this.transactionService.calculateTransaction();
-    // this.updateTransactionSummary();
-    // this.onChartChange("Expense");
-    // this.refreshContent();
-    reader.readAsText(file); 
+
+    reader.readAsText(file);
   }
-  
 }

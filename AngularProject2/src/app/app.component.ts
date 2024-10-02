@@ -12,5 +12,5 @@ import { SignUpComponent } from './Components/sign-up/sign-up.component';
   styleUrl: './app.component.css'
 })
 export class AppComponent {
-  title = 'AngularProject2';
+  title = 'Budget Tracker';
 }

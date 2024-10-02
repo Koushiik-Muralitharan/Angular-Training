@@ -3,18 +3,22 @@
   <button class="add-goal" (click)="addGoal()">
     <i class="fa-solid fa-sack-dollar"></i>
   </button>
-  
-  <span>Savings:{{goalsSavings}}</span>
+
+  <span class="add-transacation">Savings: {{ goalsSavings }}$</span>
 </div>
 <!-- add goal pop up -->
 <div *ngIf="addGoalPopUp" class="overlay">
-  <div class="glass-form" *ngIf="addGoalPopUp" [ngClass]="{'add-goal-pop-up': addGoalPopUp, }">
+  <div
+    class="glass-form"
+    *ngIf="addGoalPopUp"
+    [ngClass]="{'add-goal-pop-up': addGoalPopUp, }"
+  >
     <p class="align-close">
       <span class="close-button" (click)="addGoal()">X</span>
     </p>
     <div>
       <p>
-         Balance: <span>{{ currentBalance }}$</span>
+        Balance: <span>{{ currentBalance }}$</span>
       </p>
     </div>
     <form #goaldata="ngForm" (submit)="onGoalSubmit(goaldata)">
@@ -105,7 +109,6 @@
         >
           Add
         </button>
-        <button type="button">Cancel</button>
       </div>
     </form>
   </div>
@@ -114,7 +117,6 @@
 <!-- congrats pop up -->
 <div *ngIf="gCongrats" class="overlay">
   <div class="congrats-pop-up">
-    
     <div class="congrats-align">
       <span>Completed the goal successfully !</span>
       <span (click)="closeCongrats()">X</span>
@@ -124,7 +126,8 @@
 
 <!-- contribution pop up -->
 <div *ngIf="contributeGoalPopUp" class="overlay">
-  <div class="glass-form"
+  <div
+    class="glass-form"
     *ngIf="contributeGoalPopUp"
     [ngClass]="{ 'add-goal-pop-up': contributeGoalPopUp }"
   >
@@ -163,9 +166,7 @@
           <small *ngIf="gcfamount.errors?.['required']"
             >*amount is a required field</small
           >
-          <small *ngIf="gcfamount.errors?.['min']"
-            >*Enter a valid amount</small
-          >
+          <small *ngIf="gcfamount.errors?.['min']">*Enter a valid amount</small>
         </div>
         <div *ngIf="goalContributionCheck(gcfamount.value)">
           <small>*This contribution will exceed the target</small>
@@ -186,7 +187,6 @@
         >
           Add
         </button>
-        <button type="button">Cancel</button>
       </div>
     </form>
   </div>
@@ -194,9 +194,9 @@
 
 <!-- update goal -->
 <div *ngIf="updateGoalPopUp" class="overlay">
-  <div class="update-pop-up" >
+  <div class="update-pop-up">
     <div class="align-close"><span (click)="updateGoal()">X</span></div>
-    <form  #editGoalForm="ngForm" (submit)="goalUpdate(editGoalForm)">
+    <form #editGoalForm="ngForm" (submit)="goalUpdate(editGoalForm)">
       <p class="form-elements">
         <label for="editGoalName">Edit Goal Name</label>
         <input
@@ -208,11 +208,23 @@
           [(ngModel)]="editGoalName"
           #goalNameInput="ngModel"
         />
-        <span *ngIf="goalNameInput.invalid && goalNameInput.touched" class="error-msg">
-          <span *ngIf="goalNameInput.errors?.['required']">Goal name is required.</span>
-          <span *ngIf="goalNameInput.errors?.['pattern']">Goal name cannot contain numbers.</span>
+        <span
+          *ngIf="goalNameInput.invalid && goalNameInput.touched"
+          class="error-msg"
+        >
+          <span *ngIf="goalNameInput.errors?.['required']"
+            >Goal name is required.</span
+          >
+          <span *ngIf="goalNameInput.errors?.['pattern']"
+            >Goal name cannot contain numbers.</span
+          >
         </span>
-        <span *ngIf="checkGoalNameUpdate(goalNameInput.value) && goalNameInput.dirty">Name already exists</span>
+        <span
+          *ngIf="
+            checkGoalNameUpdate(goalNameInput.value) && goalNameInput.dirty
+          "
+          >Name already exists</span
+        >
       </p>
 
       <p class="form-elements">
@@ -226,13 +238,28 @@
           [(ngModel)]="editGoalAmount"
           #goalAmountInput="ngModel"
         />
-        <span *ngIf="goalAmountInput.invalid && goalAmountInput.touched" class="error-msg">
-          <span *ngIf="goalAmountInput.errors?.['required']">Goal amount is required.</span>
-          <span *ngIf="goalAmountInput.errors?.['min']">Goal amount cannot be negative.</span>
+        <span
+          *ngIf="goalAmountInput.invalid && goalAmountInput.touched"
+          class="error-msg"
+        >
+          <span *ngIf="goalAmountInput.errors?.['required']"
+            >Goal amount is required.</span
+          >
+          <span *ngIf="goalAmountInput.errors?.['min']"
+            >Goal amount cannot be negative.</span
+          >
         </span>
       </p>
 
-      <div><button [disabled]="!editGoalForm.valid || checkGoalNameUpdate(goalNameInput.value)">Update</button></div>
+      <div>
+        <button
+          [disabled]="
+            !editGoalForm.valid || checkGoalNameUpdate(goalNameInput.value)
+          "
+        >
+          Update
+        </button>
+      </div>
     </form>
   </div>
 </div>
